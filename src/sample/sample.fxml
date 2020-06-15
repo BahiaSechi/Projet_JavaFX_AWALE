@@ -1,29 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
-   <children>
-      <Pane prefHeight="200.0" prefWidth="200.0">
-         <children>
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutY="57.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../img/plateau.png" />
-               </image>
-            </ImageView>
-            <ImageView fitHeight="33.0" fitWidth="59.0" layoutX="7.0" layoutY="117.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../../img/bille_2.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-   </children>
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
    <rowConstraints>
       <RowConstraints />
    </rowConstraints>
+   <children>
+      <VBox prefHeight="275.0" prefWidth="404.0">
+         <children>
+            <MenuBar>
+              <menus>
+                <Menu mnemonicParsing="false" text="Fichier">
+                  <items>
+                        <MenuItem mnemonicParsing="false" text="Nouveau" />
+                        <MenuItem mnemonicParsing="false" text="Charger" />
+                    <MenuItem mnemonicParsing="false" text="Sauvegarder" />
+                        <MenuItem mnemonicParsing="false" text="Abandonner" />
+                        <MenuItem mnemonicParsing="false" text="Arrêt partie" />
+                        <MenuItem mnemonicParsing="false" text="Annuler coup" />
+                        <MenuItem mnemonicParsing="false" text="Quitter jeu" />
+                  </items>
+                </Menu>
+                  <Menu mnemonicParsing="false" text="Règles">
+                    <items>
+                      <MenuItem mnemonicParsing="false" text="Afficher règles" />
+                    </items>
+                  </Menu>
+                <Menu mnemonicParsing="false" text="Options">
+                  <items>
+                        <CheckMenuItem mnemonicParsing="false" text="Voir graines" />
+                        <CheckMenuItem mnemonicParsing="false" text="Voir plateau" />
+                        <CheckMenuItem mnemonicParsing="false" text="Bruitages" />
+                        <CheckMenuItem mnemonicParsing="false" text="Musiques" />
+                  </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Système">
+                  <items>
+                    <MenuItem mnemonicParsing="false" text="About" />
+                  </items>
+                </Menu>
+              </menus>
+            </MenuBar>
+            <HBox prefHeight="250.0" prefWidth="485.0">
+               <children>
+                  <Label text="Label" />
+                  <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </HBox>
+         </children>
+      </VBox>
+   </children>
 </GridPane>
