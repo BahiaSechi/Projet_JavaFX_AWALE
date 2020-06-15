@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.CheckMenuItem?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<GridPane alignment="center" hgap="10" maxHeight="300.0" maxWidth="700.0" minHeight="300.0" minWidth="700.0" prefHeight="300.0" prefWidth="700.0" vgap="10" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <columnConstraints>
       <ColumnConstraints />
    </columnConstraints>
@@ -23,19 +14,19 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <VBox>
-         <children>
-            <MenuBar>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
               <menus>
                 <Menu mnemonicParsing="false" text="Fichier">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="Nouveau" />
-                        <MenuItem mnemonicParsing="false" text="Charger" />
-                    <MenuItem mnemonicParsing="false" text="Sauvegarder" />
-                        <MenuItem mnemonicParsing="false" text="Abandonner" />
-                        <MenuItem mnemonicParsing="false" text="Arrêt partie" />
-                        <MenuItem mnemonicParsing="false" text="Annuler coup" />
-                        <MenuItem mnemonicParsing="false" text="Quitter jeu" />
+                        <MenuItem mnemonicParsing="false" onAction="#newGame" text="Nouveau" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadGame" text="Charger" />
+                    <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Sauvegarder" />
+                        <MenuItem mnemonicParsing="false" onAction="#surrender" text="Abandonner" />
+                        <MenuItem mnemonicParsing="false" onAction="#stopGame" text="Arrêt partie" />
+                        <MenuItem mnemonicParsing="false" onAction="#cancel" text="Annuler coup" />
+                        <MenuItem mnemonicParsing="false" onAction="#quit" text="Quitter jeu" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Règles">
@@ -48,55 +39,62 @@
                         <CheckMenuItem mnemonicParsing="false" text="Voir graines" />
                         <CheckMenuItem mnemonicParsing="false" text="Voir plateau" />
                         <CheckMenuItem mnemonicParsing="false" text="Bruitages" />
-                        <CheckMenuItem mnemonicParsing="false" text="Musiques" />
+                          <CheckMenuItem mnemonicParsing="false" text="Musiques" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Système">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem mnemonicParsing="false" onAction="#about" text="À propos" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
-            <HBox prefHeight="264.0" prefWidth="698.0">
+         </top>
+         <center>
+            <ImageView fitHeight="150.0" fitWidth="294.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../img/plateau.png" />
+               </image>
+            </ImageView>
+         </center>
+         <left>
+            <VBox prefHeight="173.0" prefWidth="99.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox>
-                     <HBox.margin>
-                        <Insets left="20.0" right="10.0" top="25.0" />
-                     </HBox.margin>
-                     <children>
-                        <Label text="Joueur 1" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label text="Graines : " />
-                     </children>
-                  </VBox>
-                  <ImageView  fitHeight="300.0" fitWidth="450.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image fx:id="plateau" url="@../../img/plateau.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" top="25.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <VBox prefHeight="173.0" prefWidth="82.0">
-                     <HBox.margin>
-                        <Insets left="8.0" right="20.0" top="25.0" />
-                     </HBox.margin>
-                     <children>
-                        <Label prefHeight="18.0" prefWidth="86.0" text="Joueur 2" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label text="Graines :" />
-                     </children>
-                  </VBox>
+                  <Label text="Joueur 1" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Graines : ">
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
-            </HBox>
-         </children>
-      </VBox>
+            </VBox>
+         </left>
+         <right>
+            <VBox prefHeight="141.0" prefWidth="82.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Joueur 2" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Graines :">
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
+                     </children>
+            </VBox>
+         </right>
+      </BorderPane>
    </children>
 </GridPane>
