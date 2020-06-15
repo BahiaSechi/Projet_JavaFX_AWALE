@@ -14,19 +14,19 @@
       <RowConstraints />
    </rowConstraints>
    <children>
-      <VBox prefHeight="222.0" prefWidth="497.0">
-         <children>
-            <MenuBar>
+      <BorderPane prefHeight="200.0" prefWidth="200.0">
+         <top>
+            <MenuBar BorderPane.alignment="CENTER">
               <menus>
                 <Menu mnemonicParsing="false" text="Fichier">
                   <items>
-                        <MenuItem mnemonicParsing="false" text="Nouveau" />
-                        <MenuItem mnemonicParsing="false" text="Charger" />
-                    <MenuItem mnemonicParsing="false" text="Sauvegarder" />
-                        <MenuItem mnemonicParsing="false" text="Abandonner" />
-                        <MenuItem mnemonicParsing="false" text="Arrêt partie" />
-                        <MenuItem mnemonicParsing="false" text="Annuler coup" />
-                        <MenuItem mnemonicParsing="false" text="Quitter jeu" />
+                        <MenuItem mnemonicParsing="false" onAction="#newGame" text="Nouveau" />
+                        <MenuItem mnemonicParsing="false" onAction="#loadGame" text="Charger" />
+                    <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Sauvegarder" />
+                        <MenuItem mnemonicParsing="false" onAction="#surrender" text="Abandonner" />
+                        <MenuItem mnemonicParsing="false" onAction="#stopGame" text="Arrêt partie" />
+                        <MenuItem mnemonicParsing="false" onAction="#cancel" text="Annuler coup" />
+                        <MenuItem mnemonicParsing="false" onAction="#quit" text="Quitter jeu" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Règles">
@@ -39,55 +39,62 @@
                         <CheckMenuItem mnemonicParsing="false" text="Voir graines" />
                         <CheckMenuItem mnemonicParsing="false" text="Voir plateau" />
                         <CheckMenuItem mnemonicParsing="false" text="Bruitages" />
-                        <CheckMenuItem mnemonicParsing="false" text="Musiques" />
+                          <CheckMenuItem mnemonicParsing="false" text="Musiques" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Système">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                    <MenuItem mnemonicParsing="false" onAction="#about" text="About" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
-            <HBox prefHeight="250.0" prefWidth="463.0">
+         </top>
+         <center>
+            <ImageView fitHeight="150.0" fitWidth="294.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+               <image>
+                  <Image url="@../img/plateau.png" />
+               </image>
+            </ImageView>
+         </center>
+         <left>
+            <VBox prefHeight="173.0" prefWidth="99.0" BorderPane.alignment="CENTER">
                <children>
-                  <VBox>
-                     <HBox.margin>
-                        <Insets left="20.0" right="10.0" top="25.0" />
-                     </HBox.margin>
-                     <children>
-                        <Label text="Joueur 1" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label text="Graines : " />
-                     </children>
-                  </VBox>
-                  <ImageView fitHeight="150.0" fitWidth="294.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../img/plateau.png" />
-                     </image>
-                     <HBox.margin>
-                        <Insets left="10.0" right="10.0" top="25.0" />
-                     </HBox.margin>
-                  </ImageView>
-                  <VBox prefHeight="173.0" prefWidth="82.0">
-                     <HBox.margin>
-                        <Insets left="8.0" right="20.0" top="25.0" />
-                     </HBox.margin>
-                     <children>
-                        <Label text="Joueur 2" textAlignment="CENTER">
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label text="Graines :" />
-                     </children>
-                  </VBox>
+                  <Label text="Joueur 1" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Graines : ">
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
                </children>
-            </HBox>
-         </children>
-      </VBox>
+            </VBox>
+         </left>
+         <right>
+            <VBox prefHeight="141.0" prefWidth="82.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label text="Joueur 2" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label text="Graines :">
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
+                     </children>
+            </VBox>
+         </right>
+      </BorderPane>
    </children>
 </GridPane>
