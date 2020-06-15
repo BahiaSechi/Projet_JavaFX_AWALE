@@ -61,7 +61,7 @@
                         <Insets left="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <Label text="Graines : ">
+                  <Label fx:id="grainesJ1" text="Graines : ">
                      <VBox.margin>
                         <Insets left="10.0" />
                      </VBox.margin>
@@ -83,7 +83,7 @@
                         <Insets left="10.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <Label text="Graines :">
+                  <Label fx:id="grainesJ2" text="Graines :">
                      <VBox.margin>
                         <Insets left="10.0" />
                      </VBox.margin>

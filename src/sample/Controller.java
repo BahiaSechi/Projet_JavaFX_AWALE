@@ -2,8 +2,10 @@ package sample;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -32,6 +34,9 @@ public class Controller implements Initializable{
     public List<Integer> gameState;
     public List<Integer> gameStatePreviousPlay;
 
+    @FXML
+    public Label grainesJ1, grainesJ2;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.gameState = new ArrayList<Integer>(14);
@@ -53,6 +58,15 @@ public class Controller implements Initializable{
      * @param actionEvent
      */
     public void newGame(ActionEvent actionEvent) {
+        for(int i = 0; i < 12; i++){
+            gameState.set(i, 4);
+        }
+        gameState.set(12, 0);
+        gameState.set(13, 0);
+
+        gameStatePreviousPlay = gameState;
+
+        this.updateView();
     }
 
     /**
@@ -108,5 +122,10 @@ public class Controller implements Initializable{
                 "Version : 1.0");
         about.setTitle("AWALE - About");
         about.show();
+    }
+
+    public void updateView() {
+        grainesJ1.setText("Graines : " + Integer.toString(gameState.get(12)));
+        grainesJ2.setText("Graines : " + Integer.toString(gameState.get(13)));
     }
 }
