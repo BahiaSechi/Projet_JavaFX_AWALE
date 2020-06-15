@@ -2,10 +2,7 @@ package sample;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.control.Alert;
 
 import java.net.URL;
@@ -31,22 +28,22 @@ import java.util.ResourceBundle;
 
 public class Controller implements Initializable{
 
-    public boolean isgamelaunch;
-    public List<Integer> gamestate;
-    public List<Integer> gamestatepreviousplay;
+    public boolean isGameLaunched;
+    public List<Integer> gameState;
+    public List<Integer> gameStatePreviousPlay;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gamestate = new ArrayList<Integer>(14);
-        this.gamestatepreviousplay = new ArrayList<Integer>(14);
+        this.gameState = new ArrayList<Integer>(14);
+        this.gameStatePreviousPlay = new ArrayList<Integer>(14);
 
         for(int i = 0; i < 12; i++){
-            gamestate.add(4);
+            gameState.add(4);
         }
-        gamestate.add(0);
-        gamestate.add(0);
+        gameState.add(0);
+        gameState.add(0);
 
-        gamestatepreviousplay = gamestate;
+        gameStatePreviousPlay = gameState;
     }
 
     // FUNCTIONS : MENU FICHIER
