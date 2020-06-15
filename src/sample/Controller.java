@@ -100,6 +100,9 @@ public class Controller implements Initializable{
         Platform.exit();
     }
 
+    /**
+     * Information about the projects.
+     */
     public void about() {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.setContentText("This project is part of the programming course (ENSICAEN - Engineering School). \n" +
