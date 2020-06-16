@@ -31,7 +31,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Règles">
                             <items>
-                                <MenuItem mnemonicParsing="false" text="Afficher règles" />
+                                <MenuItem mnemonicParsing="false" onAction="#rules" text="Afficher règles" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Options">
