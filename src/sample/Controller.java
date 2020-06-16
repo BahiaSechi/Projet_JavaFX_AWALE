@@ -3,10 +3,18 @@ package sample;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +36,7 @@ import java.util.ResourceBundle;
  * @version 1.0
  */
 
-public class Controller implements Initializable{
+public class Controller implements Initializable {
 
     public boolean isGameLaunched;
     public List<Integer> gameState;
@@ -83,6 +91,7 @@ public class Controller implements Initializable{
      * @param actionEvent
      */
     public void saveGame(ActionEvent actionEvent) {
+
     }
 
     /**
@@ -113,6 +122,18 @@ public class Controller implements Initializable{
         Platform.exit();
     }
 
+    // FUNCTIONS : MENU REGLES
+
+    public void rules(ActionEvent actionEvent) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./RulesView.fxml"));
+        Parent root1 = (Parent) fxmlLoader.load();
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("AWALE - Règles");
+        stage.setScene(new Scene(root1));
+        stage.show();
+    }
+
     // FUNCTIONS : MENU SYSTEME
 
     /**
@@ -134,4 +155,6 @@ public class Controller implements Initializable{
         grainesJ1.setText("Graines : " + grainesJ1_value);
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
+
+
 }
