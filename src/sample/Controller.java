@@ -118,17 +118,50 @@ public class Controller implements Initializable {
     }
 
     /**
-     *
-     * @param actionEvent
+     * If a player hits the button surrender, the other player immediately wins.
+     * Then another game is loaded.
      */
-    public void surrender(ActionEvent actionEvent) {
+    public void surrender() {
+        // Message dans les logs ou popup
+        sendAlert("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
+        newGame();
     }
 
     /**
      *
-     * @param actionEvent
+     * Si le total des graines du plateau est inférieur à 6, sans qu'aucun des joueurs n'a un total de graines
+     * supérieur à 24. La partie est nulle.
+     *
+     * @return A boolean ; if it's true, there is an equality between the two players.
+     */
+    public boolean egalite() {
+        int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
+        return totalGraines < 6 && (grainesJ1_value <= 24 || grainesJ2_value <= 24);
+    }
+
+    /**
+     * Quand il ne reste qu'au plus 10 graines sur le plateau, le joueur qui a la main peut proposer
+     * l'abandon de la partie. S'il est accepté, les deux joueurs se partagent les graines restantes.
+     * TODO function pas finie
      */
     public void stopGame(ActionEvent actionEvent) {
+        /**
+         * Règle 9 :
+         * boolean whoPlayed
+         * true : joueur 1
+         * false : joueur 2
+         * 48 - scoreJoueur1 - scoreJoueur2;
+         *
+         * Partage en deux
+         */
+        int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
+
+        if (totalGraines <= 10) {
+            //TODO LES CONDITIONS D'ARRET ET ACCEPTATION
+            // Si le joueur accepte alors :
+            grainesJ1_value += totalGraines/2;
+            grainesJ2_value += totalGraines/2;
+        }
     }
 
     /**
