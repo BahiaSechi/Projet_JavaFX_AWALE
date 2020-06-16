@@ -57,6 +57,12 @@ public class Controller implements Initializable {
     @FXML
     public AnchorPane plateau_de_jeu;
 
+    /**
+     * Initializing the game, especially the board.
+     *
+     * @param location The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.gameState = new ArrayList<>(12);
@@ -78,7 +84,7 @@ public class Controller implements Initializable {
      * Create a new game.
      *
      */
-    public void newGame(ActionEvent actionEvent) {
+    public void newGame() {
         for (int i = 0; i < 12; i++) {
             gameState.set(i, 4);
         }
@@ -136,20 +142,29 @@ public class Controller implements Initializable {
 
     // FUNCTIONS : MENU REGLES
 
-    public void rules(ActionEvent actionEvent) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./RulesView.fxml"));
-        Parent root1 = (Parent) fxmlLoader.load();
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("AWALE - Règles");
-        stage.setScene(new Scene(root1));
-        stage.show();
+    /**
+     * Displays the rules of the game in a new window.
+     *
+     * @throws IOException Throws an exception if opening a new windows is not possible.
+     */
+    public void rules() throws IOException {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./RulesView.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("AWALE - Règles");
+            stage.setScene(new Scene(root1));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // FUNCTIONS : MENU SYSTEME
 
     /**
-     * Information about the projects.
+     * Information about the project and its authors.
      */
     public void about() {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
@@ -162,13 +177,21 @@ public class Controller implements Initializable {
     }
 
     // FUNCTIONS : UTILITARIES
+
+    /**
+     * Update the image displaying the number of marbles (billes).
+     *
+     * @param nombreDeBilles The number of marbles in the hole.
+     * @return tempImage The correct image to display.
+     */
     public Image getNewImage(int nombreDeBilles){
+
         String srcImage;
         Image tempImage;
 
-        if(nombreDeBilles >= 10){
+        if (nombreDeBilles >= 10) {
             srcImage = "@./../img/bille_10.png";
-        }else{
+        } else {
             srcImage = "@./../img/bille_"+ nombreDeBilles +".png";
         }
 
@@ -176,6 +199,9 @@ public class Controller implements Initializable {
         return tempImage;
     }
 
+    /**
+     * Update the view of the game.
+     */
     public void updateView() {
         gameStatePreviousPlay = gameState;
 
