@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -65,7 +66,7 @@ public class Controller implements Initializable {
     public AnchorPane plateau_de_jeu;
 
     @FXML
-    public TextField logs;
+    public TextArea logs;
 
     /**
      * Initializing the game, especially the board.
@@ -206,6 +207,7 @@ public class Controller implements Initializable {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("AWALE - Règles");
             stage.setScene(new Scene(root1));
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
