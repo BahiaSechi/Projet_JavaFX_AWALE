@@ -52,6 +52,8 @@ public class Controller implements Initializable {
 
     //Pour savoir qui joue : true est le J1, false est le J2;
     public boolean whoPlay;
+    String log1, log2, log3;
+
 
     @FXML
     public Label grainesJ1, grainesJ2;
@@ -83,6 +85,10 @@ public class Controller implements Initializable {
         grainesJ1_value = 0;
         grainesJ2_value = 0;
         whoPlay = true;
+
+        log1 = "";
+        log2 = "";
+        log3 = "";
 
         logs.setEditable(false);
         playerRound();
@@ -269,7 +275,7 @@ public class Controller implements Initializable {
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
 
-    public void sendAlert(String message, String title) {
+    public void sendAlert (String message, String title) {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.setContentText(message);
         about.setTitle(title);
@@ -277,7 +283,7 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Displays on the log fieldtext who has to play.
+     * Displays on the log field text who has to play.
      */
     private void playerRound() {
         if (whoPlay) {
@@ -285,6 +291,24 @@ public class Controller implements Initializable {
         } else {
             logs.setText("C'est le tour du joueur 2.");
         }
+    }
+
+    /**
+     *
+     * @param message
+     */
+    public void addLogMessage (String message) {
+        log1 = log2;
+        log2 = log3;
+        log3 = message;
+        logs.setText(log1 + "\n" + log2 + "\n" + log3);
+    }
+
+    public void clearLogs () {
+        log1 = "";
+        log2 = "";
+        log3 = "";
+        logs.setText("");
     }
 
     public void makeAMove(MouseEvent event){
