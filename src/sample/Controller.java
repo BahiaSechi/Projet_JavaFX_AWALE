@@ -235,29 +235,96 @@ public class Controller implements Initializable {
         about.show();
     }
 
+    public int distribuerBille(int caseNumber){
+        int caseTemp = caseNumber;
+        int nombreBilles = gameState.get(caseNumber);
+        gameState.set(caseTemp, 0);
+
+        while(nombreBilles > 0){
+            if(caseTemp >= 6 && caseTemp < 11){
+                caseTemp ++;
+            }else if(caseTemp == 11){
+                caseTemp = 5;
+            }else if(caseTemp > 0 && caseTemp <= 5){
+                caseTemp --;
+            }else if(caseTemp == 0){
+                caseTemp = 6;
+            }else{
+                System.out.println("Erreur distribuerBilles");
+            }
+
+            gameState.set(caseTemp, gameState.get(caseTemp)+1);
+
+            nombreBilles --;
+        }
+
+        return caseTemp;
+    }
+
+    public int ramasseBilles(int caseTemp){
+        int res = 0;
+
+        if(whoPlay && caseTemp >= 0 && caseTemp <= 5){
+            while(caseTemp != 6){
+                if(gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3){
+                    System.out.println("Joueur 1 récupère " + gameState.get(caseTemp) + " billes");
+                    res += gameState.get(caseTemp);
+                    gameState.set(caseTemp, 0);
+                    caseTemp ++;
+                }else{
+                    caseTemp = 6;
+                }
+            }
+
+            if(res == 0){
+                System.out.println("Pas de point ce tour ci");
+            }
+
+        }else if(!whoPlay && caseTemp >= 6 && caseTemp <= 11){
+            while(caseTemp != 5){
+                if(gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3){
+                    System.out.println("Joueur 2 récupère " + gameState.get(caseTemp) + " billes");
+                    res += gameState.get(caseTemp);
+                    gameState.set(caseTemp, 0);
+                    caseTemp --;
+                }else{
+                    caseTemp = 5;
+                }
+            }
+
+            if(res == 0){
+                System.out.println("Pas de point ce tour ci");
+            }
+        }
+
+        return res;
+    }
+
     public void makeAMove(MouseEvent event){
         final Node source = (Node) event.getSource();
         String id = source.getId();
-        int caseNumber = Integer.parseInt(id);
-        System.out.println(id);
+        int caseNumber = Integer.parseInt(id) - 1;
 
-        int nombreBilles, tempCase;
-        nombreBilles = gameState.get(caseNumber);
+        int nombreBilles = gameState.get(caseNumber);
+        int caseTemp, newPoints = 0;
 
-        if(whoPlay && (caseNumber >= 1 && caseNumber <= 6)){
+        if(whoPlay && (caseNumber >= 0 && caseNumber <= 5)){
             sendAlert("C'est le tour du joueur 1, pas le votre", "Impossible !");
 
-        }else if(!whoPlay &&(caseNumber >= 7 && caseNumber <= 12)){
+        }else if(!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)){
             sendAlert("C'est le tour du joueur 2, pas le votre", "Impossible !");
 
         }else if(nombreBilles == 0){
             sendAlert("Vous devez jouer une case ", "Impossible !");
 
         }else{
-            gameState.set(caseNumber, 0);
+            caseTemp = distribuerBille(caseNumber);
+            newPoints = ramasseBilles(caseTemp);
 
-            while(nombreBilles > 0){
-                
+            if(whoPlay){
+                grainesJ1_value += newPoints;
+            }else{
+                grainesJ2_value += newPoints;
             }
 
             whoPlay = !whoPlay;
