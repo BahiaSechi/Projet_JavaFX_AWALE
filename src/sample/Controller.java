@@ -52,6 +52,8 @@ public class Controller implements Initializable {
 
     //Pour savoir qui joue : true est le J1, false est le J2;
     public boolean whoPlay;
+    String log1, log2, log3;
+
 
     @FXML
     public Label grainesJ1, grainesJ2;
@@ -83,6 +85,8 @@ public class Controller implements Initializable {
         grainesJ1_value = 0;
         grainesJ2_value = 0;
         whoPlay = true;
+
+        clearLogs();
 
         logs.setEditable(false);
         playerRound();
@@ -269,22 +273,40 @@ public class Controller implements Initializable {
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
 
-    /**
-     * Displays on the log fieldtext who has to play.
-     */
-    private void playerRound() {
-        if (whoPlay) {
-            logs.setText("C'est le tour du joueur 1.");
-        } else {
-            logs.setText("C'est le tour du joueur 2.");
-        }
-    }
-
-    public void sendAlert(String message, String title) {
+    public void sendAlert (String message, String title) {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.setContentText(message);
         about.setTitle(title);
         about.show();
+    }
+
+    /**
+     *
+     * @param message
+     */
+    public void addLogMessage (String message){
+        log1 = log2;
+        log2 = log3;
+        log3 = message;
+        logs.setText(log1 + "\n" + log2 + "\n" + log3);
+    }
+
+    public void clearLogs () {
+        log1 = "";
+        log2 = "";
+        log3 = "";
+        logs.setText("");
+    }
+
+    /**
+     * Displays on the log field text who has to play.
+     */
+    private void playerRound() {
+        if (whoPlay) {
+            addLogMessage("C'est le tour du Joueur 1");
+        } else {
+            addLogMessage("C'est le tour du Joueur 2");
+        }
     }
 
     public int distribuerBille(int caseNumber){
@@ -319,7 +341,7 @@ public class Controller implements Initializable {
         if (whoPlay && caseTemp >= 0 && caseTemp <= 5) {
             while (caseTemp != 6) {
                 if (gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3) {
-                    System.out.println("Joueur 1 récupère " + gameState.get(caseTemp) + " billes");
+                    addLogMessage("Joueur 1 récupère " + gameState.get(caseTemp) + " billes à la case " + (caseTemp+1));
                     res += gameState.get(caseTemp);
                     gameState.set(caseTemp, 0);
                     caseTemp++;
@@ -329,13 +351,13 @@ public class Controller implements Initializable {
             }
 
             if (res == 0) {
-                System.out.println("Pas de point ce tour ci");
+                addLogMessage("Pas de point ce tour ci");
             }
 
         } else if (!whoPlay && caseTemp >= 6 && caseTemp <= 11) {
             while (caseTemp != 5) {
                 if (gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3) {
-                    System.out.println("Joueur 2 récupère " + gameState.get(caseTemp) + " billes");
+                    addLogMessage("Joueur 2 récupère " + gameState.get(caseTemp) + " billes à la case " + (caseTemp+1));
                     res += gameState.get(caseTemp);
                     gameState.set(caseTemp, 0);
                     caseTemp--;
@@ -345,7 +367,7 @@ public class Controller implements Initializable {
             }
 
             if (res == 0) {
-                System.out.println("Pas de point ce tour ci");
+                addLogMessage("Pas de point ce tour ci");
             }
         }
 
@@ -383,5 +405,6 @@ public class Controller implements Initializable {
         }
 
         updateView();
+        playerRound();
     }
 }
