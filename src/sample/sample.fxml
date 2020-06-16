@@ -61,6 +61,14 @@
                                 <Insets left="10.0" top="10.0" />
                             </VBox.margin>
                         </Label>
+                        <Label text="(en bas)" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0" />
+                            </VBox.margin>
+                        </Label>
                         <Label fx:id="grainesJ1" text="Graines : ">
                             <VBox.margin>
                                 <Insets left="10.0" />
@@ -78,6 +86,14 @@
                         <Label text="Joueur 2" textAlignment="CENTER">
                             <font>
                                 <Font name="System Bold" size="26.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <Label text="(en haut)" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
                             </font>
                             <VBox.margin>
                                 <Insets left="10.0" top="10.0" />
