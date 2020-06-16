@@ -33,14 +33,15 @@ public class Controller implements Initializable{
     public boolean isGameLaunched;
     public List<Integer> gameState;
     public List<Integer> gameStatePreviousPlay;
+    public int grainesJ1_value, grainesJ2_value;
 
     @FXML
     public Label grainesJ1, grainesJ2;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gameState = new ArrayList<Integer>(14);
-        this.gameStatePreviousPlay = new ArrayList<Integer>(14);
+        this.gameState = new ArrayList<>(14);
+        this.gameStatePreviousPlay = new ArrayList<>(14);
 
         for(int i = 0; i < 12; i++){
             gameState.add(4);
@@ -54,15 +55,16 @@ public class Controller implements Initializable{
     // FUNCTIONS : MENU FICHIER
 
     /**
+     * Create a new game.
      *
-     * @param actionEvent
      */
     public void newGame(ActionEvent actionEvent) {
-        for(int i = 0; i < 12; i++){
+        for (int i = 0; i < 12; i++) {
             gameState.set(i, 4);
         }
-        gameState.set(12, 0);
-        gameState.set(13, 0);
+
+        grainesJ1_value = 0;
+        grainesJ2_value = 0;
 
         gameStatePreviousPlay = gameState;
 
@@ -111,6 +113,8 @@ public class Controller implements Initializable{
         Platform.exit();
     }
 
+    // FUNCTIONS : MENU SYSTEME
+
     /**
      * Information about the projects.
      */
@@ -124,8 +128,10 @@ public class Controller implements Initializable{
         about.show();
     }
 
+    // FUNCTIONS : UTILITARIES
+
     public void updateView() {
-        grainesJ1.setText("Graines : " + Integer.toString(gameState.get(12)));
-        grainesJ2.setText("Graines : " + Integer.toString(gameState.get(13)));
+        grainesJ1.setText("Graines : " + grainesJ1_value);
+        grainesJ2.setText("Graines : " + grainesJ2_value);
     }
 }
