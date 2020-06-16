@@ -111,6 +111,7 @@ public class Controller implements Initializable {
 
         gameStatePreviousPlay = gameState;
 
+        clearLogs();
         this.updateView();
         addLogMessage("Nouvelle partie !");
     }
