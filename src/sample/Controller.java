@@ -5,10 +5,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -46,18 +51,25 @@ public class Controller implements Initializable {
     @FXML
     public Label grainesJ1, grainesJ2;
 
+    @FXML
+    public ImageView case1, case2, case3, case4, case5, case6, case7, case8, case9, case10, case11, case12;
+
+    @FXML
+    public AnchorPane plateau_de_jeu;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gameState = new ArrayList<>(14);
-        this.gameStatePreviousPlay = new ArrayList<>(14);
+        this.gameState = new ArrayList<>(12);
+        this.gameStatePreviousPlay = new ArrayList<>(12);
 
-        for(int i = 0; i < 12; i++){
+        for (int i = 0; i < 12; i++) {
             gameState.add(4);
         }
-        gameState.add(0);
-        gameState.add(0);
 
-        gameStatePreviousPlay = gameState;
+        grainesJ1_value = 0;
+        grainesJ2_value = 0;
+
+        updateView();
     }
 
     // FUNCTIONS : MENU FICHIER
@@ -150,8 +162,37 @@ public class Controller implements Initializable {
     }
 
     // FUNCTIONS : UTILITARIES
+    public Image getNewImage(int nombreDeBilles){
+        String srcImage;
+        Image tempImage;
+
+        if(nombreDeBilles >= 10){
+            srcImage = "@./../img/bille_10.png";
+        }else{
+            srcImage = "@./../img/bille_"+ nombreDeBilles +".png";
+        }
+
+        tempImage = new Image(srcImage);
+        return tempImage;
+    }
 
     public void updateView() {
+        gameStatePreviousPlay = gameState;
+
+        case1.setImage(getNewImage(gameState.get(0)));
+        case2.setImage(getNewImage(gameState.get(1)));
+        case3.setImage(getNewImage(gameState.get(2)));
+        case4.setImage(getNewImage(gameState.get(3)));
+        case5.setImage(getNewImage(gameState.get(4)));
+        case6.setImage(getNewImage(gameState.get(5)));
+
+        case7.setImage(getNewImage(gameState.get(6)));
+        case8.setImage(getNewImage(gameState.get(7)));
+        case9.setImage(getNewImage(gameState.get(8)));
+        case10.setImage(getNewImage(gameState.get(9)));
+        case11.setImage(getNewImage(gameState.get(10)));
+        case12.setImage(getNewImage(gameState.get(11)));
+
         grainesJ1.setText("Graines : " + grainesJ1_value);
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
