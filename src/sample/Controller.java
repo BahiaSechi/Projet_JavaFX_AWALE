@@ -11,6 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.input.MouseEvent;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -40,6 +41,9 @@ public class Controller implements Initializable{
     public List<Integer> gameStatePreviousPlay;
     public int grainesJ1_value, grainesJ2_value;
 
+    //Pour savoir qui joue : true est le J1, false est le J2;
+    public boolean whoPlay;
+
     @FXML
     public Label grainesJ1, grainesJ2;
 
@@ -60,6 +64,7 @@ public class Controller implements Initializable{
 
         grainesJ1_value = 0;
         grainesJ2_value = 0;
+        whoPlay = true;
 
         updateView();
     }
@@ -174,5 +179,43 @@ public class Controller implements Initializable{
 
         grainesJ1.setText("Graines : " + grainesJ1_value);
         grainesJ2.setText("Graines : " + grainesJ2_value);
+    }
+
+    public void sendAlert(String message, String title) {
+        Alert about = new Alert(Alert.AlertType.INFORMATION);
+        about.setContentText(message);
+        about.setTitle(title);
+        about.show();
+    }
+
+    public void makeAMove(MouseEvent event){
+        final Node source = (Node) event.getSource();
+        String id = source.getId();
+        int caseNumber = Integer.parseInt(id);
+        System.out.println(id);
+
+        int nombreBilles, tempCase;
+        nombreBilles = gameState.get(caseNumber);
+
+        if(whoPlay && (caseNumber >= 1 && caseNumber <= 6)){
+            sendAlert("C'est le tour du joueur 1, pas le votre", "Impossible !");
+
+        }else if(!whoPlay &&(caseNumber >= 7 && caseNumber <= 12)){
+            sendAlert("C'est le tour du joueur 2, pas le votre", "Impossible !");
+
+        }else if(nombreBilles == 0){
+            sendAlert("Vous devez jouer une case ", "Impossible !");
+
+        }else{
+            gameState.set(caseNumber, 0);
+
+            while(nombreBilles > 0){
+                
+            }
+
+            whoPlay = !whoPlay;
+        }
+
+        updateView();
     }
 }
