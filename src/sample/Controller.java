@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -61,6 +62,9 @@ public class Controller implements Initializable {
     @FXML
     public AnchorPane plateau_de_jeu;
 
+    @FXML
+    public TextField logs;
+
     /**
      * Initializing the game, especially the board.
      *
@@ -79,6 +83,10 @@ public class Controller implements Initializable {
         grainesJ1_value = 0;
         grainesJ2_value = 0;
         whoPlay = true;
+
+        logs.setEditable(false);
+        playerRound();
+        logs.setFocusTraversable(false);
 
         updateView();
     }
@@ -118,17 +126,50 @@ public class Controller implements Initializable {
     }
 
     /**
-     *
-     * @param actionEvent
+     * If a player hits the button surrender, the other player immediately wins.
+     * Then another game is loaded.
      */
-    public void surrender(ActionEvent actionEvent) {
+    public void surrender() {
+        // Message dans les logs ou popup
+        sendAlert("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
+        newGame();
     }
 
     /**
      *
-     * @param actionEvent
+     * Si le total des graines du plateau est inférieur à 6, sans qu'aucun des joueurs n'a un total de graines
+     * supérieur à 24. La partie est nulle.
+     *
+     * @return A boolean ; if it's true, there is an equality between the two players.
+     */
+    public boolean egalite() {
+        int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
+        return totalGraines < 6 && (grainesJ1_value <= 24 || grainesJ2_value <= 24);
+    }
+
+    /**
+     * Quand il ne reste qu'au plus 10 graines sur le plateau, le joueur qui a la main peut proposer
+     * l'abandon de la partie. S'il est accepté, les deux joueurs se partagent les graines restantes.
+     * TODO function pas finie
      */
     public void stopGame(ActionEvent actionEvent) {
+        /**
+         * Règle 9 :
+         * boolean whoPlayed
+         * true : joueur 1
+         * false : joueur 2
+         * 48 - scoreJoueur1 - scoreJoueur2;
+         *
+         * Partage en deux
+         */
+        int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
+
+        if (totalGraines <= 10) {
+            //TODO LES CONDITIONS D'ARRET ET ACCEPTATION
+            // Si le joueur accepte alors :
+            grainesJ1_value += totalGraines/2;
+            grainesJ2_value += totalGraines/2;
+        }
     }
 
     /**
@@ -228,6 +269,17 @@ public class Controller implements Initializable {
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
 
+    /**
+     * Displays on the log fieldtext who has to play.
+     */
+    private void playerRound() {
+        if (whoPlay) {
+            logs.setText("C'est le tour du joueur 1.");
+        } else {
+            logs.setText("C'est le tour du joueur 2.");
+        }
+    }
+
     public void sendAlert(String message, String title) {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.setContentText(message);
@@ -261,38 +313,38 @@ public class Controller implements Initializable {
         return caseTemp;
     }
 
-    public int ramasseBilles(int caseTemp){
+    public int ramasseBilles(int caseTemp) {
         int res = 0;
 
-        if(whoPlay && caseTemp >= 0 && caseTemp <= 5){
-            while(caseTemp != 6){
-                if(gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3){
+        if (whoPlay && caseTemp >= 0 && caseTemp <= 5) {
+            while (caseTemp != 6) {
+                if (gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3) {
                     System.out.println("Joueur 1 récupère " + gameState.get(caseTemp) + " billes");
                     res += gameState.get(caseTemp);
                     gameState.set(caseTemp, 0);
-                    caseTemp ++;
-                }else{
+                    caseTemp++;
+                } else {
                     caseTemp = 6;
                 }
             }
 
-            if(res == 0){
+            if (res == 0) {
                 System.out.println("Pas de point ce tour ci");
             }
 
-        }else if(!whoPlay && caseTemp >= 6 && caseTemp <= 11){
-            while(caseTemp != 5){
-                if(gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3){
+        } else if (!whoPlay && caseTemp >= 6 && caseTemp <= 11) {
+            while (caseTemp != 5) {
+                if (gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3) {
                     System.out.println("Joueur 2 récupère " + gameState.get(caseTemp) + " billes");
                     res += gameState.get(caseTemp);
                     gameState.set(caseTemp, 0);
-                    caseTemp --;
-                }else{
+                    caseTemp--;
+                } else {
                     caseTemp = 5;
                 }
             }
 
-            if(res == 0){
+            if (res == 0) {
                 System.out.println("Pas de point ce tour ci");
             }
         }
