@@ -112,6 +112,7 @@ public class Controller implements Initializable {
         gameStatePreviousPlay = gameState;
 
         this.updateView();
+        addLogMessage("Nouvelle partie !");
     }
 
     /**
@@ -350,10 +351,6 @@ public class Controller implements Initializable {
                 }
             }
 
-            if (res == 0) {
-                addLogMessage("Pas de point ce tour ci");
-            }
-
         } else if (!whoPlay && caseTemp >= 6 && caseTemp <= 11) {
             while (caseTemp != 5) {
                 if (gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3) {
@@ -366,9 +363,8 @@ public class Controller implements Initializable {
                 }
             }
 
-            if (res == 0) {
-                addLogMessage("Pas de point ce tour ci");
-            }
+        }else{
+            addLogMessage("Pas de point ce tour ci");
         }
 
         return res;
