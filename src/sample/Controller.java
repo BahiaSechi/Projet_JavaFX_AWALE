@@ -4,8 +4,13 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,16 +43,26 @@ public class Controller implements Initializable{
     @FXML
     public Label grainesJ1, grainesJ2;
 
+    @FXML
+    public Image case2, case3, case4, case5, case6, case7, case8, case9, case10, case11, case12;
+
+    @FXML
+    public ImageView case1;
+
+    @FXML
+    public AnchorPane plateau_de_jeu;
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.gameState = new ArrayList<>(14);
-        this.gameStatePreviousPlay = new ArrayList<>(14);
+        this.gameState = new ArrayList<>(12);
+        this.gameStatePreviousPlay = new ArrayList<>(12);
 
-        for(int i = 0; i < 12; i++){
+        for (int i = 0; i < 12; i++) {
             gameState.add(4);
         }
-        gameState.add(0);
-        gameState.add(0);
+
+        grainesJ1_value = 0;
+        grainesJ2_value = 0;
 
         gameStatePreviousPlay = gameState;
     }
@@ -131,6 +146,20 @@ public class Controller implements Initializable{
     // FUNCTIONS : UTILITARIES
 
     public void updateView() {
+        gameStatePreviousPlay = gameState;
+
+        String srcImage;
+        Image tempImage;
+        Scene scene = plateau_de_jeu.getScene();
+        
+        srcImage = "@./../img/bille_"+ gameState.get(0) +".png";
+        tempImage = new Image(srcImage);
+        case1.setImage(tempImage);
+        System.out.println(case1.getId());
+
+        for (int i = 0; i < 12; i++) {
+        }
+
         grainesJ1.setText("Graines : " + grainesJ1_value);
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
