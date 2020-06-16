@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -61,6 +62,9 @@ public class Controller implements Initializable {
     @FXML
     public AnchorPane plateau_de_jeu;
 
+    @FXML
+    public TextField logs;
+
     /**
      * Initializing the game, especially the board.
      *
@@ -79,6 +83,10 @@ public class Controller implements Initializable {
         grainesJ1_value = 0;
         grainesJ2_value = 0;
         whoPlay = true;
+
+        logs.setEditable(false);
+        playerRound();
+        logs.setFocusTraversable(false);
 
         updateView();
     }
@@ -266,6 +274,17 @@ public class Controller implements Initializable {
         about.setContentText(message);
         about.setTitle(title);
         about.show();
+    }
+
+    /**
+     * Displays on the log fieldtext who has to play.
+     */
+    private void playerRound() {
+        if (whoPlay) {
+            logs.setText("C'est le tour du joueur 1.");
+        } else {
+            logs.setText("C'est le tour du joueur 2.");
+        }
     }
 
     public void makeAMove(MouseEvent event){
