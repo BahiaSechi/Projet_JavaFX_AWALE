@@ -39,7 +39,7 @@
                                 <CheckMenuItem mnemonicParsing="false" text="Voir graines" />
                                 <CheckMenuItem mnemonicParsing="false" text="Voir plateau" />
                                 <CheckMenuItem mnemonicParsing="false" text="Bruitages" />
-                                <CheckMenuItem mnemonicParsing="false" text="Musiques" />
+                                <CheckMenuItem fx:id="musicCheck" mnemonicParsing="false" onAction="#musicPlay" text="Musique" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" text="Système">
@@ -184,6 +184,16 @@
                      </font>
                   </Label>
                   <TextArea fx:id="logs" layoutX="14.0" layoutY="483.0" prefHeight="86.0" prefWidth="843.0" />
+                  <Label layoutX="760.0" layoutY="9.0" text="Difficulté">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+                  <RadioButton fx:id="debutant" layoutX="759.0" layoutY="38.0" mnemonicParsing="false" text="Débutant">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="level" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="moyen" layoutX="759.0" layoutY="61.0" mnemonicParsing="false" text="Moyen" toggleGroup="$level" />
                     </children>
                 </AnchorPane>
             </center>

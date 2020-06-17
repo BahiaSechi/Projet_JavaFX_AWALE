@@ -1,7 +1,10 @@
 package sample;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -9,19 +12,19 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -70,6 +73,12 @@ public class Controller implements Initializable {
     @FXML
     public TextArea logs;
 
+    @FXML
+    public CheckMenuItem musicCheck;
+
+    @FXML
+    public RadioButton debutant, moyen;
+
     /**
      * Initializing the game, especially the board.
      *
@@ -83,7 +92,7 @@ public class Controller implements Initializable {
         this.gameStateTampon = new ArrayList<>(12);
 
         for (int i = 0; i < 12; i++) {
-            gameState.add(4);
+            gameState.add(2);
         }
 
         grainesJ1_value = 0;
@@ -114,7 +123,6 @@ public class Controller implements Initializable {
         grainesJ2_value = 0;
 
         gameStatePreviousPlay = gameState;
-        gameStateTampon = gameState;
 
         clearLogs();
         this.updateView();
@@ -346,7 +354,11 @@ public class Controller implements Initializable {
     public int distribuerBilleTampon(int caseNumber){
         int caseTemp = caseNumber;
         int nombreBilles = gameStateTampon.get(caseNumber);
-        gameStateTampon.set(caseTemp, 0);
+        System.out.println("pas tampon : " + gameState.get(caseNumber));
+        System.out.println("tampon : " + gameStateTampon.get(caseNumber));
+        gameStateTampon.set(caseNumber, 0);
+        System.out.println("pas tampon : " + gameState.get(caseNumber));
+        System.out.println("tampon : " + gameStateTampon.get(caseNumber));
 
         while(nombreBilles > 0){
             if(caseTemp >= 6 && caseTemp < 11){
@@ -395,11 +407,9 @@ public class Controller implements Initializable {
                     caseTemp = 5;
                 }
             }
-
-        }else{
+        } else {
             addLogMessage("Pas de point ce tour ci");
         }
-
         return res;
     }
 
@@ -442,11 +452,12 @@ public class Controller implements Initializable {
         int caseTemp, newPoints;
         int billesRestanteAdvAvantCoup;
 
-        if(whoPlay && (caseNumber >= 0 && caseNumber <= 5)){
+        if (whoPlay && (caseNumber >= 0 && caseNumber <= 5)) {
             sendAlert("C'est le tour du joueur 1, pas le votre", "Impossible !");
 
-        }else if(!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)){
+        } else if (!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)) {
             sendAlert("C'est le tour du joueur 2, pas le votre", "Impossible !");
+
 
         }else if(nombreBilles == 0){
             sendAlert("Vous devez jouer une case avec des billes", "Impossible !");
@@ -455,17 +466,29 @@ public class Controller implements Initializable {
             gameStateTampon = gameState;
             billesRestanteAdvAvantCoup = billesRestanteAdversaire();
             caseTemp = distribuerBilleTampon(caseNumber);
+            System.out.println("coucou 0 bis: " + gameState.get(caseNumber));
             newPoints = ramasseBillesTampon(caseTemp);
 
-            if(billesRestanteAdvAvantCoup == newPoints){
+            System.out.println("coucou 0: " + newPoints + " ; " + caseTemp);
+            System.out.println("coucou 0 bis: " + gameState.get(caseNumber));
+
+            if(billesRestanteAdvAvantCoup == 0 && billesRestanteAdversaire() == 0){
+                addLogMessage("Vous devez nourrir votre adversaire !");
+
+            }else if(billesRestanteAdvAvantCoup == newPoints && newPoints != 0){
                 addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire");
                 caseTemp = distribuerBille(caseNumber);
                 whoPlay = !whoPlay;
-            }else if(billesRestanteAdvAvantCoup == 0 && billesRestanteAdversaire() == 0){
-                addLogMessage("Vous devez nourrir votre adversaire !");
+
             }else{
+
+                System.out.println("coucou 1 : " + caseNumber + " ; " + caseTemp);
+                System.out.println("coucou 1 bis: " + gameState.get(caseNumber));
                 caseTemp = distribuerBille(caseNumber);
+                System.out.println("coucou 2 : " + caseNumber + " ; " + caseTemp);
                 newPoints = ramasseBilles(caseTemp);
+
+                System.out.println("coucou 3 : " + newPoints + " ; " + caseTemp);
 
                 if(whoPlay){
                     grainesJ1_value += newPoints;
@@ -475,10 +498,10 @@ public class Controller implements Initializable {
                 whoPlay = !whoPlay;
             }
         }
-
         updateView();
         playerRound();
     }
+
 
     public int billesRestanteAdversaire(){
         int res = 0;
@@ -512,5 +535,21 @@ public class Controller implements Initializable {
         }
 
         return res;
+    }
+
+    /**
+     * Play a music when the checkbox is ticked.
+     * TODO A faire fonctionner
+     */
+    public void musicPlay() {
+        String musicFile = "src\\test.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        if (musicCheck.isSelected()) {
+            mediaPlayer.play();
+            mediaPlayer.setVolume(1.0);
+        } else {
+            mediaPlayer.pause();
+        }
     }
 }
