@@ -37,7 +37,7 @@
                         <Menu mnemonicParsing="false" text="Options">
                             <items>
                                 <CheckMenuItem mnemonicParsing="false" text="Voir graines" />
-                                <CheckMenuItem mnemonicParsing="false" text="Voir plateau" />
+                                <CheckMenuItem fx:id="boardChecked" mnemonicParsing="false" onAction="#boardDisplay" text="Voir plateau" />
                                 <CheckMenuItem mnemonicParsing="false" text="Bruitages" />
                                 <CheckMenuItem fx:id="musicCheck" mnemonicParsing="false" onAction="#musicPlay" text="Musique" />
                             </items>
@@ -194,6 +194,18 @@
                      </toggleGroup>
                   </RadioButton>
                   <RadioButton fx:id="moyen" layoutX="759.0" layoutY="61.0" mnemonicParsing="false" text="Moyen" toggleGroup="$level" />
+                  <TextField fx:id="number7" editable="false" layoutX="145.0" layoutY="386.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number2" editable="false" layoutX="235.0" layoutY="198.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number1" editable="false" layoutX="145.0" layoutY="198.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number12" editable="false" layoutX="622.0" layoutY="386.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number11" editable="false" layoutX="516.0" layoutY="386.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number10" editable="false" layoutX="435.0" layoutY="386.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number8" editable="false" layoutX="235.0" layoutY="386.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number9" editable="false" layoutX="327.0" layoutY="386.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number6" editable="false" layoutX="615.0" layoutY="198.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number5" editable="false" layoutX="534.0" layoutY="198.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number3" editable="false" layoutX="334.0" layoutY="198.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number4" editable="false" layoutX="426.0" layoutY="198.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
                     </children>
                 </AnchorPane>
             </center>

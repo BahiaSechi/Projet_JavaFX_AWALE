@@ -72,10 +72,13 @@ public class Controller implements Initializable {
     public TextArea logs;
 
     @FXML
-    public CheckMenuItem musicCheck;
+    public CheckMenuItem musicCheck, boardChecked;
 
     @FXML
     public RadioButton debutant, moyen;
+
+    @FXML
+    public TextField number1, number2, number3, number4, number5, number6, number7, number8, number9, number10, number11, number12;
 
     /**
      * Initializing the game, especially the board.
@@ -282,6 +285,19 @@ public class Controller implements Initializable {
         case11.setImage(getNewImage(gameState.get(10)));
         case12.setImage(getNewImage(gameState.get(11)));
 
+        number1.setText(gameState.get(0).toString());
+        number2.setText(gameState.get(1).toString());
+        number3.setText(gameState.get(2).toString());
+        number4.setText(gameState.get(3).toString());
+        number5.setText(gameState.get(4).toString());
+        number6.setText(gameState.get(5).toString());
+        number7.setText(gameState.get(6).toString());
+        number8.setText(gameState.get(7).toString());
+        number9.setText(gameState.get(8).toString());
+        number10.setText(gameState.get(9).toString());
+        number11.setText(gameState.get(10).toString());
+        number12.setText(gameState.get(11).toString());
+
         grainesJ1.setText("Graines : " + grainesJ1_value);
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
@@ -428,4 +444,19 @@ public class Controller implements Initializable {
         }
     }
 
+    public void boardDisplay(ActionEvent actionEvent) {
+        boolean visible = boardChecked.isSelected();
+        number1.setVisible(visible);
+        number2.setVisible(visible);
+        number3.setVisible(visible);
+        number4.setVisible(visible);
+        number5.setVisible(visible);
+        number6.setVisible(visible);
+        number7.setVisible(visible);
+        number8.setVisible(visible);
+        number9.setVisible(visible);
+        number10.setVisible(visible);
+        number11.setVisible(visible);
+        number12.setVisible(visible);
+    }
 }
