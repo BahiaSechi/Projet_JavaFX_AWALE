@@ -36,7 +36,7 @@
                         </Menu>
                         <Menu mnemonicParsing="false" text="Options">
                             <items>
-                                <CheckMenuItem mnemonicParsing="false" text="Voir graines" />
+                                <CheckMenuItem fx:id="hoverChecked" mnemonicParsing="false" text="Voir graines" />
                                 <CheckMenuItem fx:id="boardChecked" mnemonicParsing="false" onAction="#boardDisplay" text="Voir plateau" />
                                 <CheckMenuItem mnemonicParsing="false" text="Bruitages" />
                                 <CheckMenuItem fx:id="musicCheck" mnemonicParsing="false" onAction="#musicPlay" text="Musique" />
@@ -118,62 +118,62 @@
                                 <Image url="@../img/plateau.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="1" fx:id="case1" fitHeight="79.0" fitWidth="81.0" layoutX="140.0" layoutY="144.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="1" fx:id="case1" fitHeight="79.0" fitWidth="81.0" layoutX="140.0" layoutY="144.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="2" fx:id="case2" fitHeight="53.0" fitWidth="81.0" layoutX="244.0" layoutY="145.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="2" fx:id="case2" fitHeight="53.0" fitWidth="81.0" layoutX="244.0" layoutY="145.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="3" fx:id="case3" fitHeight="86.0" fitWidth="77.0" layoutX="344.0" layoutY="145.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="3" fx:id="case3" fitHeight="86.0" fitWidth="77.0" layoutX="344.0" layoutY="145.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="4" fx:id="case4" fitHeight="56.0" fitWidth="75.0" layoutX="435.0" layoutY="143.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="4" fx:id="case4" fitHeight="56.0" fitWidth="75.0" layoutX="435.0" layoutY="143.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="5" fx:id="case5" fitHeight="53.0" fitWidth="92.0" layoutX="529.0" layoutY="145.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="5" fx:id="case5" fitHeight="53.0" fitWidth="92.0" layoutX="529.0" layoutY="145.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="6" fx:id="case6" fitHeight="59.0" fitWidth="78.0" layoutX="622.0" layoutY="145.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="6" fx:id="case6" fitHeight="59.0" fitWidth="78.0" layoutX="622.0" layoutY="145.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="7" fx:id="case7" fitHeight="64.0" fitWidth="76.0" layoutX="145.0" layoutY="336.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="7" fx:id="case7" fitHeight="64.0" fitWidth="76.0" layoutX="145.0" layoutY="336.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="8" fx:id="case8" fitHeight="56.0" fitWidth="80.0" layoutX="243.0" layoutY="334.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="8" fx:id="case8" fitHeight="56.0" fitWidth="80.0" layoutX="243.0" layoutY="334.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="9" fx:id="case9" fitHeight="57.0" fitWidth="75.0" layoutX="345.0" layoutY="336.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="9" fx:id="case9" fitHeight="57.0" fitWidth="75.0" layoutX="345.0" layoutY="336.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                        <ImageView id="10" fx:id="case10" fitHeight="51.0" fitWidth="74.0" layoutX="436.0" layoutY="336.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                        <ImageView id="10" fx:id="case10" fitHeight="51.0" fitWidth="74.0" layoutX="436.0" layoutY="336.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@../img/bille_4.png" />
                             </image>
                         </ImageView>
-                      <ImageView id="11" fx:id="case11" fitHeight="53.0" fitWidth="69.0" layoutX="534.0" layoutY="338.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                      <ImageView id="11" fx:id="case11" fitHeight="53.0" fitWidth="69.0" layoutX="534.0" layoutY="338.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                          <image>
                             <Image url="@../img/bille_4.png" />
                          </image>
                       </ImageView>
-                      <ImageView id="12" fx:id="case12" fitHeight="65.0" fitWidth="72.0" layoutX="625.0" layoutY="337.0" onMouseClicked="#makeAMove" pickOnBounds="true" preserveRatio="true">
+                      <ImageView id="12" fx:id="case12" fitHeight="65.0" fitWidth="72.0" layoutX="625.0" layoutY="337.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
                          <image>
                             <Image url="@../img/bille_4.png" />
                          </image>

@@ -53,6 +53,7 @@ public class Controller implements Initializable {
     public boolean whoPlay;
     String log1, log2, log3;
 
+    Tooltip mousePositionToolTip = new Tooltip("");
 
     @FXML
     public Label grainesJ1, grainesJ2;
@@ -67,7 +68,7 @@ public class Controller implements Initializable {
     public TextArea logs;
 
     @FXML
-    public CheckMenuItem musicCheck, boardChecked;
+    public CheckMenuItem musicCheck, boardChecked, hoverChecked;
 
     @FXML
     public RadioButton debutant, moyen;
@@ -178,7 +179,7 @@ public class Controller implements Initializable {
 
         int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
 
-        if (totalGraines <= 20) {
+        if (totalGraines <= 10) {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.setTitle("Arrêt partie");
             alert.setContentText("Voulez-vous arrêter la partie ?");
@@ -253,6 +254,28 @@ public class Controller implements Initializable {
         } else {
             mediaPlayer.pause();
         }
+    }
+
+    /**
+     * Displays a tooltip when hovering an image.
+     * @param mouseEvent
+     */
+    public void hoverImage(MouseEvent mouseEvent) {
+        final Node source = (Node) mouseEvent.getSource();
+        String id = source.getId();
+        int caseNumber = Integer.parseInt(id) - 1;
+        boolean visible = hoverChecked.isSelected();
+        if (visible) {
+            mousePositionToolTip.setText(gameState.get(caseNumber).toString());
+            mousePositionToolTip.show(source, mouseEvent.getScreenX() + 20, mouseEvent.getScreenY());
+        }
+    }
+
+    /**
+     * Hides the little tooltip when not hovering an image.
+     */
+    public void notHoverImage() {
+        mousePositionToolTip.hide();
     }
 
     // FUNCTIONS : MENU REGLES
@@ -487,4 +510,5 @@ public class Controller implements Initializable {
         updateView();
         playerRound();
     }
+
 }
