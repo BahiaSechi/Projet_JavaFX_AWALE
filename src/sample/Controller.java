@@ -49,7 +49,9 @@ public class Controller implements Initializable {
     public boolean isGameLaunched;
     public List<Integer> gameState;
     public List<Integer> gameStatePreviousPlay;
+    public List<Integer> gameStateTampon;
     public int grainesJ1_value, grainesJ2_value;
+    public int modeDeJeu; //0 = débutant, 1 = moyen
 
     //Pour savoir qui joue : true est le J1, false est le J2;
     public boolean whoPlay;
@@ -78,6 +80,7 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         this.gameState = new ArrayList<>(12);
         this.gameStatePreviousPlay = new ArrayList<>(12);
+        this.gameStateTampon = new ArrayList<>(12);
 
         for (int i = 0; i < 12; i++) {
             gameState.add(4);
@@ -111,6 +114,7 @@ public class Controller implements Initializable {
         grainesJ2_value = 0;
 
         gameStatePreviousPlay = gameState;
+        gameStateTampon = gameState;
 
         clearLogs();
         this.updateView();
@@ -339,6 +343,32 @@ public class Controller implements Initializable {
         return caseTemp;
     }
 
+    public int distribuerBilleTampon(int caseNumber){
+        int caseTemp = caseNumber;
+        int nombreBilles = gameStateTampon.get(caseNumber);
+        gameStateTampon.set(caseTemp, 0);
+
+        while(nombreBilles > 0){
+            if(caseTemp >= 6 && caseTemp < 11){
+                caseTemp ++;
+            }else if(caseTemp == 11){
+                caseTemp = 5;
+            }else if(caseTemp > 0 && caseTemp <= 5){
+                caseTemp --;
+            }else if(caseTemp == 0){
+                caseTemp = 6;
+            }else{
+                System.out.println("Erreur distribuerBilles");
+            }
+
+            gameStateTampon.set(caseTemp, gameStateTampon.get(caseTemp)+1);
+
+            nombreBilles --;
+        }
+
+        return caseTemp;
+    }
+
     public int ramasseBilles(int caseTemp) {
         int res = 0;
 
@@ -373,13 +403,44 @@ public class Controller implements Initializable {
         return res;
     }
 
+    public int ramasseBillesTampon(int caseTemp) {
+        int res = 0;
+
+        if (whoPlay && caseTemp >= 0 && caseTemp <= 5) {
+            while (caseTemp != 6) {
+                if (gameStateTampon.get(caseTemp) == 2 || gameStateTampon.get(caseTemp) == 3) {
+                    res += gameStateTampon.get(caseTemp);
+                    gameStateTampon.set(caseTemp, 0);
+                    caseTemp++;
+                } else {
+                    caseTemp = 6;
+                }
+            }
+
+        } else if (!whoPlay && caseTemp >= 6 && caseTemp <= 11) {
+            while (caseTemp != 5) {
+                if (gameStateTampon.get(caseTemp) == 2 || gameStateTampon.get(caseTemp) == 3) {
+                    res += gameStateTampon.get(caseTemp);
+                    gameStateTampon.set(caseTemp, 0);
+                    caseTemp--;
+                } else {
+                    caseTemp = 5;
+                }
+            }
+
+        }
+
+        return res;
+    }
+
     public void makeAMove(MouseEvent event){
         final Node source = (Node) event.getSource();
         String id = source.getId();
         int caseNumber = Integer.parseInt(id) - 1;
 
         int nombreBilles = gameState.get(caseNumber);
-        int caseTemp, newPoints = 0;
+        int caseTemp, newPoints;
+        int billesRestanteAdvAvantCoup;
 
         if(whoPlay && (caseNumber >= 0 && caseNumber <= 5)){
             sendAlert("C'est le tour du joueur 1, pas le votre", "Impossible !");
@@ -388,22 +449,68 @@ public class Controller implements Initializable {
             sendAlert("C'est le tour du joueur 2, pas le votre", "Impossible !");
 
         }else if(nombreBilles == 0){
-            sendAlert("Vous devez jouer une case ", "Impossible !");
+            sendAlert("Vous devez jouer une case avec des billes", "Impossible !");
 
         }else{
-            caseTemp = distribuerBille(caseNumber);
-            newPoints = ramasseBilles(caseTemp);
+            gameStateTampon = gameState;
+            billesRestanteAdvAvantCoup = billesRestanteAdversaire();
+            caseTemp = distribuerBilleTampon(caseNumber);
+            newPoints = ramasseBillesTampon(caseTemp);
 
-            if(whoPlay){
-                grainesJ1_value += newPoints;
+            if(billesRestanteAdvAvantCoup == newPoints){
+                addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire");
+                caseTemp = distribuerBille(caseNumber);
+                whoPlay = !whoPlay;
+            }else if(billesRestanteAdvAvantCoup == 0 && billesRestanteAdversaire() == 0){
+                addLogMessage("Vous devez nourrir votre adversaire !");
             }else{
-                grainesJ2_value += newPoints;
-            }
+                caseTemp = distribuerBille(caseNumber);
+                newPoints = ramasseBilles(caseTemp);
 
-            whoPlay = !whoPlay;
+                if(whoPlay){
+                    grainesJ1_value += newPoints;
+                }else{
+                    grainesJ2_value += newPoints;
+                }
+                whoPlay = !whoPlay;
+            }
         }
 
         updateView();
         playerRound();
+    }
+
+    public int billesRestanteAdversaire(){
+        int res = 0;
+        if(whoPlay){
+            for(int i = 0; i < 6; i++){
+                res += gameStateTampon.get(i);
+            }
+        }else{
+            for(int i = 6; i < 12; i++){
+                res += gameStateTampon.get(i);
+            }
+        }
+
+        return res;
+    }
+
+    public boolean finPartieDebutant(){
+        boolean res = false;
+
+
+
+
+        return res;
+    }
+
+    public boolean finPartieMoyen(){
+        boolean res = false;
+
+        if(grainesJ1_value >=25 || grainesJ2_value >= 25){
+            res = true;
+        }
+
+        return res;
     }
 }
