@@ -526,14 +526,20 @@ public class Controller implements Initializable {
 
     public void displayGagnant(){
         String gagnant = "Joueur 1";
-        if(grainesJ2_value > grainesJ1_value){
-            gagnant = "Joueur 2";
+
+        if(egalite()){
+            sendAlertInfo("La partie est finie ! " +
+                    " MATCH NUL"
+                    , "FIN");
+        }else{
+            if(grainesJ2_value > grainesJ1_value){
+                gagnant = "Joueur 2";
+            }
+
+            sendAlertInfo("La partie est finie ! " +
+                    " Le " + gagnant + " gagne !"
+                    , "FIN");
         }
-
-
-        sendAlertInfo("La partie est finie ! " +
-                        " Le " + gagnant + " gagne !"
-                , "FIN");
     }
 
     public boolean finDePartie(){
@@ -544,11 +550,14 @@ public class Controller implements Initializable {
                 partieEnCours = false;
                 res = true;
             }
-        }else{
+        }else if(moyen.isSelected()){
             if(finPartieMoyen()){
                 partieEnCours = false;
                 res = true;
             }
+        }else if(egalite()){
+            partieEnCours = false;
+            res = true;
         }
         return res;
     }
