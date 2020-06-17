@@ -489,7 +489,7 @@ public class Controller implements Initializable {
         int caseNumber = Integer.parseInt(id) - 1;
 
         int nombreBilles = gameState.get(caseNumber);
-        int caseTemp, newPoints = 0;
+        int caseTemp, newPoints;
 
         if (!partieEnCours){
             sendAlertInfo("Vous devez relancer une partie pour jouer", "Partie finie");
@@ -513,8 +513,8 @@ public class Controller implements Initializable {
                 grainesJ2_value += newPoints;
             }
 
-            if (finDePartie()){
-
+            if(finDePartie()){
+                displayGagnant();
             }else{
                 whoPlay = !whoPlay;
                 playerRound();
@@ -524,28 +524,29 @@ public class Controller implements Initializable {
         updateView();
     }
 
-    public boolean finDePartie(){
-        boolean res = false;
-
+    public void displayGagnant(){
         String gagnant = "Joueur 1";
         if(grainesJ2_value > grainesJ1_value){
             gagnant = "Joueur 2";
         }
 
+
+        sendAlertInfo("La partie est finie ! " +
+                        " Le " + gagnant + " gagne !"
+                , "FIN");
+    }
+
+    public boolean finDePartie(){
+        boolean res = false;
+
         if(debutant.isSelected()){
             if(finPartieDebutant()){
                 partieEnCours = false;
-                sendAlertInfo("La partie est finie ! " +
-                        " Le " + gagnant + " gagne !"
-                        , "FIN");
                 res = true;
             }
         }else{
             if(finPartieMoyen()){
                 partieEnCours = false;
-                sendAlertInfo("La partie est finie ! " +
-                                " Le " + gagnant + " gagne !"
-                        , "FIN");
                 res = true;
             }
         }
