@@ -193,19 +193,19 @@ public class Controller implements Initializable {
                  grainesJ1_value += totalGraines / 2;
                  grainesJ2_value += totalGraines / 2;
                  updateView();
+
+                // TODO Appeler la fonction qui donne le gagnant en fonction de la difficulte choisie
+
+                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
+                alert2.setTitle("Nouvelle partie");
+                alert2.setContentText("Voulez-vous recommencer une partie ?");
+
+                Optional<ButtonType> option2 = alert2.showAndWait();
+
+                if (option2.get() == ButtonType.OK) {
+                    newGame();
+                }
             }
-        }
-
-        // TODO Appeler la fonction qui donne le gagnant en fonction de la difficulte choisie
-
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Nouvelle partie");
-        alert.setContentText("Voulez-vous recommencer une partie ?");
-
-        Optional<ButtonType> option2 = alert.showAndWait();
-
-        if (option2.get() == ButtonType.OK) {
-            newGame();
         }
     }
 
@@ -513,7 +513,7 @@ public class Controller implements Initializable {
                 grainesJ2_value += newPoints;
             }
 
-            if(finDePartie()){
+            if (finDePartie()){
 
             }else{
                 whoPlay = !whoPlay;
