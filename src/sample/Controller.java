@@ -1,34 +1,29 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 /**
@@ -112,7 +107,6 @@ public class Controller implements Initializable {
 
     /**
      * Create a new game.
-     *
      */
     public void newGame() {
         for (int i = 0; i < 12; i++) {
@@ -150,7 +144,7 @@ public class Controller implements Initializable {
      */
     public void surrender() {
         // Message dans les logs ou popup
-        sendAlert("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
+        sendAlertInfo("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
         newGame();
     }
 
@@ -169,25 +163,44 @@ public class Controller implements Initializable {
     /**
      * Quand il ne reste qu'au plus 10 graines sur le plateau, le joueur qui a la main peut proposer
      * l'abandon de la partie. S'il est accepté, les deux joueurs se partagent les graines restantes.
+     *
+     *          * Règle 9 :
+     *          * boolean whoPlayed
+     *          * true : joueur 1
+     *          * false : joueur 2
+     *          * 48 - scoreJoueur1 - scoreJoueur2;
+     *          *
+     *          * Partage en deux
+     *
      * TODO function pas finie
      */
     public void stopGame(ActionEvent actionEvent) {
-        /**
-         * Règle 9 :
-         * boolean whoPlayed
-         * true : joueur 1
-         * false : joueur 2
-         * 48 - scoreJoueur1 - scoreJoueur2;
-         *
-         * Partage en deux
-         */
+
         int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
 
-        if (totalGraines <= 10) {
-            //TODO LES CONDITIONS D'ARRET ET ACCEPTATION
-            // Si le joueur accepte alors :
-            grainesJ1_value += totalGraines/2;
-            grainesJ2_value += totalGraines/2;
+        if (totalGraines <= 20) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Arrêt partie");
+            alert.setContentText("Voulez-vous arrêter la partie ?");
+
+            Optional<ButtonType> option = alert.showAndWait();
+            if (option.get() == ButtonType.OK) {
+                 grainesJ1_value += totalGraines / 2;
+                 grainesJ2_value += totalGraines / 2;
+                 updateView();
+            }
+        }
+
+        // TODO Appeler la fonction qui donne le gagnant en fonction de la difficulte choisie
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Nouvelle partie");
+        alert.setContentText("Voulez-vous recommencer une partie ?");
+
+        Optional<ButtonType> option2 = alert.showAndWait();
+
+        if (option2.get() == ButtonType.OK) {
+            newGame();
         }
     }
 
@@ -203,6 +216,43 @@ public class Controller implements Initializable {
      */
     public void quit() {
         Platform.exit();
+    }
+
+    // FUNCTIONS : MENU OPTIONS
+
+    /**
+     * If the checkbox is checked, it displays several TextFields where the player can see the number of seeds in each hole.
+     */
+    public void boardDisplay() {
+        boolean visible = boardChecked.isSelected();
+        number1.setVisible(visible);
+        number2.setVisible(visible);
+        number3.setVisible(visible);
+        number4.setVisible(visible);
+        number5.setVisible(visible);
+        number6.setVisible(visible);
+        number7.setVisible(visible);
+        number8.setVisible(visible);
+        number9.setVisible(visible);
+        number10.setVisible(visible);
+        number11.setVisible(visible);
+        number12.setVisible(visible);
+    }
+
+    /**
+     * Play a music when the checkbox is ticked.
+     * TODO A faire fonctionner
+     */
+    public void musicPlay() {
+        String musicFile = "src\\test.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        if (musicCheck.isSelected()) {
+            mediaPlayer.play();
+            mediaPlayer.setVolume(1.0);
+        } else {
+            mediaPlayer.pause();
+        }
     }
 
     // FUNCTIONS : MENU REGLES
@@ -302,7 +352,13 @@ public class Controller implements Initializable {
         grainesJ2.setText("Graines : " + grainesJ2_value);
     }
 
-    public void sendAlert (String message, String title) {
+    /**
+     * Displays an information pop-up.
+     *
+     * @param message The message contained in the pop-up.
+     * @param title The title of the window.
+     */
+    public void sendAlertInfo(String message, String title) {
         Alert about = new Alert(Alert.AlertType.INFORMATION);
         about.setContentText(message);
         about.setTitle(title);
@@ -310,8 +366,9 @@ public class Controller implements Initializable {
     }
 
     /**
+     * Add a new message to the two previous logs displayed in the TextArea.
      *
-     * @param message
+     * @param message The new message to display.
      */
     public void addLogMessage (String message){
         log1 = log2;
@@ -320,6 +377,9 @@ public class Controller implements Initializable {
         logs.setText(log1 + "\n" + log2 + "\n" + log3);
     }
 
+    /**
+     * Clear the logs on the TextArea as well as the logs variables.
+     */
     public void clearLogs () {
         log1 = "";
         log2 = "";
@@ -405,13 +465,13 @@ public class Controller implements Initializable {
         int caseTemp, newPoints = 0;
 
         if (whoPlay && (caseNumber >= 0 && caseNumber <= 5)) {
-            sendAlert("C'est le tour du joueur 1, pas le votre", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 1, pas le votre", "Impossible !");
 
         } else if (!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)) {
-            sendAlert("C'est le tour du joueur 2, pas le votre", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 2, pas le votre", "Impossible !");
 
         } else if (nombreBilles == 0) {
-            sendAlert("Vous devez jouer une case ", "Impossible !");
+            sendAlertInfo("Vous devez jouer une case ", "Impossible !");
 
         } else {
             caseTemp = distribuerBille(caseNumber);
@@ -426,37 +486,5 @@ public class Controller implements Initializable {
         }
         updateView();
         playerRound();
-    }
-
-    /**
-     * Play a music when the checkbox is ticked.
-     * TODO A faire fonctionner
-     */
-    public void musicPlay() {
-        String musicFile = "src\\test.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        if (musicCheck.isSelected()) {
-            mediaPlayer.play();
-            mediaPlayer.setVolume(1.0);
-        } else {
-            mediaPlayer.pause();
-        }
-    }
-
-    public void boardDisplay(ActionEvent actionEvent) {
-        boolean visible = boardChecked.isSelected();
-        number1.setVisible(visible);
-        number2.setVisible(visible);
-        number3.setVisible(visible);
-        number4.setVisible(visible);
-        number5.setVisible(visible);
-        number6.setVisible(visible);
-        number7.setVisible(visible);
-        number8.setVisible(visible);
-        number9.setVisible(visible);
-        number10.setVisible(visible);
-        number11.setVisible(visible);
-        number12.setVisible(visible);
     }
 }
