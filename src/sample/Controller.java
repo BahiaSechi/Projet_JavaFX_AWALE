@@ -50,7 +50,7 @@ public class Controller implements Initializable {
     public int grainesJ1_value, grainesJ2_value;
 
     //Pour savoir qui joue : true est le J1, false est le J2;
-    public boolean whoPlay;
+    public boolean whoPlay, partieEnCours;
     String log1, log2, log3;
 
 
@@ -93,12 +93,15 @@ public class Controller implements Initializable {
         grainesJ1_value = 0;
         grainesJ2_value = 0;
         whoPlay = true;
+        partieEnCours = true;
 
         clearLogs();
 
         logs.setEditable(false);
         playerRound();
         logs.setFocusTraversable(false);
+
+        debutant.setSelected(true);
 
         updateView();
     }
@@ -115,6 +118,7 @@ public class Controller implements Initializable {
 
         grainesJ1_value = 0;
         grainesJ2_value = 0;
+        partieEnCours = true;
 
         gameStatePreviousPlay = gameState;
 
@@ -464,7 +468,10 @@ public class Controller implements Initializable {
         int nombreBilles = gameState.get(caseNumber);
         int caseTemp, newPoints = 0;
 
-        if (whoPlay && (caseNumber >= 0 && caseNumber <= 5)) {
+        if (!partieEnCours){
+            sendAlertInfo("Vous devez relancer une partie pour jouer", "Partie finie");
+
+        } else if (whoPlay && (caseNumber >= 0 && caseNumber <= 5)) {
             sendAlertInfo("C'est le tour du joueur 1, pas le votre", "Impossible !");
 
         } else if (!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)) {
@@ -482,9 +489,85 @@ public class Controller implements Initializable {
             } else {
                 grainesJ2_value += newPoints;
             }
-            whoPlay = !whoPlay;
+
+            if(finDePartie()){
+
+            }else{
+                whoPlay = !whoPlay;
+                playerRound();
+            }
+
         }
         updateView();
-        playerRound();
+    }
+
+    public boolean finDePartie(){
+        boolean res = false;
+
+        String gagnant = "Joueur 1";
+        if(grainesJ2_value > grainesJ1_value){
+            gagnant = "Joueur 2";
+        }
+
+        if(debutant.isSelected()){
+            if(finPartieDebutant()){
+                partieEnCours = false;
+                sendAlertInfo("La partie est finie ! " +
+                        " Le " + gagnant + " gagne !"
+                        , "FIN");
+                res = true;
+            }
+        }else{
+            if(finPartieMoyen()){
+                partieEnCours = false;
+                sendAlertInfo("La partie est finie ! " +
+                                " Le " + gagnant + " gagne !"
+                        , "FIN");
+                res = true;
+            }
+        }
+        return res;
+    }
+
+    public boolean finPartieDebutant(){
+        boolean res = false;
+        int resteJ1 = getNbBillePlateauJ1();
+        int resteJ2 = getNbBillePlateauJ2();
+
+        if(resteJ1 + resteJ2 <= 6 && (resteJ1 == 0) || (resteJ2 == 0)){
+            res = true;
+        }
+
+        return res;
+    }
+
+    public boolean finPartieMoyen(){
+        boolean res = false;
+
+        if(grainesJ1_value >=25 || grainesJ2_value >= 25){
+            res = true;
+        }
+
+        return res;
+    }
+
+    public int getNbBillePlateauJ1(){
+        int res = 0;
+
+        for(int i = 0; i < 6; i ++){
+            res += gameState.get(i);
+        }
+
+        return res;
+    }
+
+    public int getNbBillePlateauJ2(){
+        int res = 0;
+
+        for(int i = 6; i < 12; i ++){
+            res += gameState.get(i);
+        }
+
+        return res;
     }
 }
