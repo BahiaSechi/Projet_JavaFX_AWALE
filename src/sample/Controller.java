@@ -76,6 +76,11 @@ public class Controller implements Initializable {
     @FXML
     public TextField number1, number2, number3, number4, number5, number6, number7, number8, number9, number10, number11, number12;
 
+    // Music variables
+    MediaPlayer mediaPlayer;
+
+
+
     /**
      * Initializing the game, especially the board.
      *
@@ -249,12 +254,11 @@ public class Controller implements Initializable {
      * TODO A faire fonctionner
      */
     public void musicPlay() {
-        String musicFile = "src\\test.mp3";
+        String musicFile = "src/test.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer = new MediaPlayer(sound);
         if (musicCheck.isSelected()) {
             mediaPlayer.play();
-            mediaPlayer.setVolume(1.0);
         } else {
             mediaPlayer.pause();
         }
