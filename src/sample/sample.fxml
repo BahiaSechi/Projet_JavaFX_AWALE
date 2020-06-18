@@ -178,12 +178,12 @@
                             <Image url="@../img/bille_4.png" />
                          </image>
                       </ImageView>
-                  <Label layoutX="14.0" layoutY="412.0" text="Journal">
+                  <Label layoutX="14.0" layoutY="398.0" text="Journal">
                      <font>
                         <Font size="18.0" />
                      </font>
                   </Label>
-                  <TextArea fx:id="logs" layoutX="14.0" layoutY="443.0" prefHeight="126.0" prefWidth="843.0" />
+                  <TextArea fx:id="logs" layoutX="14.0" layoutY="423.0" prefHeight="146.0" prefWidth="843.0" />
                   <Label layoutX="760.0" layoutY="9.0" text="Difficulté :">
                      <font>
                         <Font size="18.0" />
