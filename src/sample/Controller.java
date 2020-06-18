@@ -49,7 +49,7 @@ public class Controller implements Initializable {
 
     //Pour savoir qui joue : true est le J1, false est le J2;
     public boolean whoPlay, partieEnCours;
-    String log1, log2, log3;
+    String log1, log2, log3, log4, log5, log6;
 
     Tooltip mousePositionToolTip = new Tooltip("");
 
@@ -106,6 +106,12 @@ public class Controller implements Initializable {
 
         clearLogs();
 
+        logs.setEditable(false);
+        logs.setFocusTraversable(false);
+        addLogMessage("Bienvenue dans ce jeu d'Awalé !");
+        addLogMessage("Vous pouvez jouer dès maintenant ou charger une partie.");
+        addLogMessage("");
+
         whoPlay = random.nextBoolean();
         if (whoPlay) {
             addLogMessage("Le joueur 1 commence.");
@@ -113,10 +119,7 @@ public class Controller implements Initializable {
             addLogMessage("Le joueur 2 commence.");
         }
 
-        logs.setEditable(false);
-        logs.setFocusTraversable(false);
-        addLogMessage("Bienvenue dans ce jeu d'Awalé");
-        addLogMessage("Vous pouvez jouer dès maintenant ou charger une partie");
+        addLogMessage("");
 
         debutant.setSelected(true);
 
@@ -439,8 +442,11 @@ public class Controller implements Initializable {
     public void addLogMessage (String message){
         log1 = log2;
         log2 = log3;
-        log3 = message;
-        logs.setText(log1 + "\n" + log2 + "\n" + log3);
+        log3 = log4;
+        log4 = log5;
+        log5 = log6;
+        log6 = message;
+        logs.setText("> " + log1 + "\n" + "> " + log2 + "\n" + "> " + log3 + "\n" + "> " + log4 + "\n" + "> " + log5 + "\n" + "> " + log6);
     }
 
     /**
@@ -450,6 +456,9 @@ public class Controller implements Initializable {
         log1 = "";
         log2 = "";
         log3 = "";
+        log4 = "";
+        log5 = "";
+        log6 = "";
         logs.setText("");
     }
 
@@ -553,9 +562,7 @@ public class Controller implements Initializable {
             }else{
                 whoPlay = !whoPlay;
             }
-
         }
-
         updateView();
     }
 
@@ -564,8 +571,8 @@ public class Controller implements Initializable {
 
         if(egalite()){
             sendAlertInfo("La partie est finie ! " +
-                    " MATCH NUL"
-                    , "FIN");
+                    " Match nul !"
+                    , "Fin de la partie.");
         }else{
             if(grainesJ2_value > grainesJ1_value){
                 gagnant = "Joueur 2";
@@ -573,7 +580,7 @@ public class Controller implements Initializable {
 
             sendAlertInfo("La partie est finie ! " +
                     " Le " + gagnant + " gagne !"
-                    , "FIN");
+                    , "Fin de la partie.");
         }
     }
 
@@ -615,7 +622,6 @@ public class Controller implements Initializable {
         if(grainesJ1_value >=25 || grainesJ2_value >= 25){
             res = true;
         }
-
         return res;
     }
 
