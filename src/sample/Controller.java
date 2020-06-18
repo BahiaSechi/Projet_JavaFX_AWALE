@@ -21,10 +21,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Address :
@@ -80,6 +77,8 @@ public class Controller implements Initializable {
     // Music variables
     public MediaPlayer mediaPlayer, effectPlayer;
 
+    // create random object
+    Random random = new Random();
 
 
     /**
@@ -106,6 +105,13 @@ public class Controller implements Initializable {
         partieEnCours = true;
 
         clearLogs();
+
+        whoPlay = random.nextBoolean();
+        if (whoPlay) {
+            addLogMessage("Le joueur 1 commence.");
+        } else {
+            addLogMessage("Le joueur 2 commence.");
+        }
 
         logs.setEditable(false);
         logs.setFocusTraversable(false);
