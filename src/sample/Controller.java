@@ -48,6 +48,7 @@ public class Controller implements Initializable {
     public List<Integer> gameState;
     public List<Integer> gameStatePreviousPlay;
     public int grainesJ1_value, grainesJ2_value;
+    public int grainesJ1_value_previous, grainesJ2_value_previous;
 
     //Pour savoir qui joue : true est le J1, false est le J2;
     public boolean whoPlay, partieEnCours;
@@ -94,10 +95,13 @@ public class Controller implements Initializable {
 
         for (int i = 0; i < 12; i++) {
             gameState.add(4);
+            gameStatePreviousPlay.add(4);
         }
 
         grainesJ1_value = 0;
         grainesJ2_value = 0;
+        grainesJ1_value_previous = 0;
+        grainesJ2_value_previous = 0;
         whoPlay = true;
         partieEnCours = true;
 
@@ -131,7 +135,9 @@ public class Controller implements Initializable {
         grainesJ2_value = 0;
         partieEnCours = true;
 
-        gameStatePreviousPlay = gameState;
+        savePreviousPlay();
+        grainesJ1_value_previous = grainesJ1_value;
+        grainesJ2_value_previous = grainesJ2_value;
 
         clearLogs();
         this.updateView();
@@ -224,6 +230,12 @@ public class Controller implements Initializable {
      * @param actionEvent
      */
     public void cancel(ActionEvent actionEvent) {
+        for(int i = 0; i<12; i++){
+            gameState.set(i, gameStatePreviousPlay.get(i));
+        }
+        grainesJ1_value = grainesJ1_value_previous;
+        grainesJ2_value = grainesJ2_value_previous;
+        updateView();
     }
 
     /**
@@ -352,7 +364,6 @@ public class Controller implements Initializable {
      * Update the view of the game.
      */
     public void updateView() {
-        gameStatePreviousPlay = gameState;
 
         case1.setImage(getNewImage(gameState.get(0)));
         case2.setImage(getNewImage(gameState.get(1)));
@@ -510,12 +521,15 @@ public class Controller implements Initializable {
             sendAlertInfo("Vous devez jouer une case ", "Impossible !");
 
         } else {
+            savePreviousPlay();
             caseTemp = distribuerBille(caseNumber);
             newPoints = ramasseBilles(caseTemp);
 
             if (whoPlay) {
+                grainesJ1_value_previous = grainesJ1_value;
                 grainesJ1_value += newPoints;
             } else {
+                grainesJ2_value_previous = grainesJ2_value;
                 grainesJ2_value += newPoints;
             }
 
@@ -527,6 +541,7 @@ public class Controller implements Initializable {
             }
 
         }
+
         updateView();
     }
 
@@ -608,6 +623,12 @@ public class Controller implements Initializable {
         }
 
         return res;
+    }
+
+    public void savePreviousPlay(){
+        for(int i = 0; i < 12; i ++){
+            gameStatePreviousPlay.set(i, gameState.get(i));
+        }
     }
 
 }
