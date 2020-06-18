@@ -38,7 +38,7 @@
                             <items>
                                 <CheckMenuItem fx:id="hoverChecked" mnemonicParsing="false" text="Voir graines" />
                                 <CheckMenuItem fx:id="boardChecked" mnemonicParsing="false" onAction="#boardDisplay" text="Voir plateau" />
-                                <CheckMenuItem mnemonicParsing="false" text="Bruitages" />
+                                <CheckMenuItem fx:id="effectCheck" mnemonicParsing="false" onAction="#isEffectTicked" text="Bruitages" />
                                 <CheckMenuItem fx:id="musicCheck" mnemonicParsing="false" onAction="#musicPlay" text="Musique" />
                             </items>
                         </Menu>

@@ -68,7 +68,7 @@ public class Controller implements Initializable {
     public TextArea logs;
 
     @FXML
-    public CheckMenuItem musicCheck, boardChecked, hoverChecked;
+    public CheckMenuItem musicCheck, boardChecked, hoverChecked, effectCheck;
 
     @FXML
     public RadioButton debutant, moyen;
@@ -77,7 +77,7 @@ public class Controller implements Initializable {
     public TextField number1, number2, number3, number4, number5, number6, number7, number8, number9, number10, number11, number12;
 
     // Music variables
-    public MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer, effectPlayer;
 
 
 
@@ -115,6 +115,10 @@ public class Controller implements Initializable {
         String musicFile = "src/test.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
+
+        String effectFile = "src/marble.wav";
+        Media sound2 = new Media(new File(effectFile).toURI().toString());
+        effectPlayer = new MediaPlayer(sound2);
     }
 
     // FUNCTIONS : MENU FICHIER
@@ -156,6 +160,7 @@ public class Controller implements Initializable {
     /**
      * If a player hits the button surrender, the other player immediately wins.
      * Then another game is loaded.
+     * TODO PAS FINI
      */
     public void surrender() {
         // Message dans les logs ou popup
@@ -255,8 +260,18 @@ public class Controller implements Initializable {
     }
 
     /**
+     * Returns a boolean if the effect checkbox is ticked.
+     */
+    public boolean isEffectTicked() {
+        if (effectCheck.isSelected()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Play a music when the checkbox is ticked.
-     * TODO A faire fonctionner
      */
     public void musicPlay() {
         if (musicCheck.isSelected()) {
@@ -512,7 +527,9 @@ public class Controller implements Initializable {
         } else {
             caseTemp = distribuerBille(caseNumber);
             newPoints = ramasseBilles(caseTemp);
-
+            if (isEffectTicked()) {
+                effectPlayer.play();
+            }
             if (whoPlay) {
                 grainesJ1_value += newPoints;
             } else {
@@ -592,11 +609,9 @@ public class Controller implements Initializable {
 
     public int getNbBillePlateauJ1(){
         int res = 0;
-
-        for(int i = 0; i < 6; i ++){
+        for (int i = 0; i < 6; i ++) {
             res += gameState.get(i);
         }
-
         return res;
     }
 
@@ -609,5 +624,4 @@ public class Controller implements Initializable {
 
         return res;
     }
-
 }
