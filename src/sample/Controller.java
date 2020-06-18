@@ -97,34 +97,10 @@ public class Controller implements Initializable {
             gameStatePreviousPlay.add(4);
         }
 
-        grainesJ1_value = 0;
-        grainesJ2_value = 0;
-        grainesJ1_value_previous = 0;
-        grainesJ2_value_previous = 0;
-        whoPlay = true;
-        partieEnCours = true;
-
-        clearLogs();
-
         logs.setEditable(false);
         logs.setFocusTraversable(false);
-        addLogMessage("Bienvenue dans ce jeu d'Awalé !");
-        addLogMessage("Vous pouvez jouer dès maintenant ou charger une partie.");
-        addLogMessage("");
-
-        whoPlay = random.nextBoolean();
-        if (whoPlay) {
-            addLogMessage("Le joueur 1 commence.");
-        } else {
-            addLogMessage("Le joueur 2 commence.");
-        }
-
-        addLogMessage("");
 
         debutant.setSelected(true);
-
-        updateView();
-
 
         String musicFile = "src/test.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
@@ -133,6 +109,8 @@ public class Controller implements Initializable {
         String effectFile = "src/marble.wav";
         Media sound2 = new Media(new File(effectFile).toURI().toString());
         effectPlayer = new MediaPlayer(sound2);
+
+        newGame();
     }
 
     // FUNCTIONS : MENU FICHIER
@@ -141,21 +119,29 @@ public class Controller implements Initializable {
      * Create a new game.
      */
     public void newGame() {
+        clearLogs();
+        addLogMessage("Nouvelle partie !");
+
         for (int i = 0; i < 12; i++) {
             gameState.set(i, 4);
+            gameStatePreviousPlay.set(i, 4);
         }
 
         grainesJ1_value = 0;
         grainesJ2_value = 0;
+        grainesJ1_value_previous = 0;
+        grainesJ2_value_previous = 0;
         partieEnCours = true;
 
-        savePreviousPlay();
-        grainesJ1_value_previous = grainesJ1_value;
-        grainesJ2_value_previous = grainesJ2_value;
+        whoPlay = random.nextBoolean();
+        if (whoPlay) {
+            addLogMessage("Le joueur 1 commence.");
+        } else {
+            addLogMessage("Le joueur 2 commence.");
+        }
 
-        clearLogs();
-        this.updateView();
-        addLogMessage("Nouvelle partie !");
+        savePreviousPlay();
+        updateView();
     }
 
     /**
