@@ -225,7 +225,9 @@ public class Controller implements Initializable {
                  grainesJ2_value += totalGraines / 2;
                  updateView();
 
-                // TODO Appeler la fonction qui donne le gagnant en fonction de la difficulte choisie
+                 // TODO DISPLAY LE GAGNANT PLUS LONGTEMPS ???
+                displayGagnant();
+                partieEnCours = false;
 
                 Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
                 alert2.setTitle("Nouvelle partie");
