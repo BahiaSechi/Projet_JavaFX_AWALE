@@ -21,10 +21,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * Address :
@@ -79,6 +76,8 @@ public class Controller implements Initializable {
     // Music variables
     public MediaPlayer mediaPlayer, effectPlayer;
 
+    // create random object
+    Random random = new Random();
 
 
     /**
@@ -98,13 +97,19 @@ public class Controller implements Initializable {
 
         grainesJ1_value = 0;
         grainesJ2_value = 0;
-        whoPlay = true;
+
         partieEnCours = true;
 
         clearLogs();
 
+        whoPlay = random.nextBoolean();
+        if (whoPlay) {
+            addLogMessage("Le joueur 1 commence.");
+        } else {
+            addLogMessage("Le joueur 2 commence.");
+        }
+
         logs.setEditable(false);
-        playerRound();
         logs.setFocusTraversable(false);
 
         debutant.setSelected(true);
@@ -435,17 +440,6 @@ public class Controller implements Initializable {
         logs.setText("");
     }
 
-    /**
-     * Displays on the log field text who has to play.
-     */
-    private void playerRound() {
-        if (whoPlay) {
-            addLogMessage("C'est le tour du Joueur 1");
-        } else {
-            addLogMessage("C'est le tour du Joueur 2");
-        }
-    }
-
     public int distribuerBille(int caseNumber){
         int caseTemp = caseNumber;
         int nombreBilles = gameState.get(caseNumber);
@@ -540,7 +534,6 @@ public class Controller implements Initializable {
                 displayGagnant();
             }else{
                 whoPlay = !whoPlay;
-                playerRound();
             }
 
         }
