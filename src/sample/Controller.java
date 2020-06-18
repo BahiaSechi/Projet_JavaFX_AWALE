@@ -77,7 +77,7 @@ public class Controller implements Initializable {
     public TextField number1, number2, number3, number4, number5, number6, number7, number8, number9, number10, number11, number12;
 
     // Music variables
-    MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer;
 
 
 
@@ -110,6 +110,11 @@ public class Controller implements Initializable {
         debutant.setSelected(true);
 
         updateView();
+
+
+        String musicFile = "src/test.mp3";
+        Media sound = new Media(new File(musicFile).toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
     }
 
     // FUNCTIONS : MENU FICHIER
@@ -254,13 +259,10 @@ public class Controller implements Initializable {
      * TODO A faire fonctionner
      */
     public void musicPlay() {
-        String musicFile = "src/test.mp3";
-        Media sound = new Media(new File(musicFile).toURI().toString());
-        mediaPlayer = new MediaPlayer(sound);
         if (musicCheck.isSelected()) {
             mediaPlayer.play();
         } else {
-            mediaPlayer.pause();
+            mediaPlayer.stop();
         }
     }
 
