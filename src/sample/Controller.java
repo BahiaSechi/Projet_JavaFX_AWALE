@@ -69,7 +69,7 @@ public class Controller implements Initializable {
     public TextArea logs;
 
     @FXML
-    public CheckMenuItem musicCheck, boardChecked, hoverChecked;
+    public CheckMenuItem musicCheck, boardChecked, hoverChecked, effectCheck;
 
     @FXML
     public RadioButton debutant, moyen;
@@ -78,7 +78,7 @@ public class Controller implements Initializable {
     public TextField number1, number2, number3, number4, number5, number6, number7, number8, number9, number10, number11, number12;
 
     // Music variables
-    public MediaPlayer mediaPlayer;
+    public MediaPlayer mediaPlayer, effectPlayer;
 
 
 
@@ -108,8 +108,9 @@ public class Controller implements Initializable {
         clearLogs();
 
         logs.setEditable(false);
-        playerRound();
         logs.setFocusTraversable(false);
+        addLogMessage("Bienvenue dans ce jeu d'Awalé");
+        addLogMessage("Vous pouvez jouer dès maintenant ou charger une partie");
 
         debutant.setSelected(true);
 
@@ -119,6 +120,10 @@ public class Controller implements Initializable {
         String musicFile = "src/test.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
+
+        String effectFile = "src/marble.wav";
+        Media sound2 = new Media(new File(effectFile).toURI().toString());
+        effectPlayer = new MediaPlayer(sound2);
     }
 
     // FUNCTIONS : MENU FICHIER
@@ -162,6 +167,7 @@ public class Controller implements Initializable {
     /**
      * If a player hits the button surrender, the other player immediately wins.
      * Then another game is loaded.
+     * TODO PAS FINI
      */
     public void surrender() {
         // Message dans les logs ou popup
@@ -267,8 +273,18 @@ public class Controller implements Initializable {
     }
 
     /**
+     * Returns a boolean if the effect checkbox is ticked.
+     */
+    public boolean isEffectTicked() {
+        if (effectCheck.isSelected()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Play a music when the checkbox is ticked.
-     * TODO A faire fonctionner
      */
     public void musicPlay() {
         if (musicCheck.isSelected()) {
@@ -431,17 +447,6 @@ public class Controller implements Initializable {
         logs.setText("");
     }
 
-    /**
-     * Displays on the log field text who has to play.
-     */
-    private void playerRound() {
-        if (whoPlay) {
-            addLogMessage("C'est le tour du Joueur 1");
-        } else {
-            addLogMessage("C'est le tour du Joueur 2");
-        }
-    }
-
     public int distribuerBille(int caseNumber){
         int caseTemp = caseNumber;
         int nombreBilles = gameState.get(caseNumber);
@@ -474,7 +479,7 @@ public class Controller implements Initializable {
         if (whoPlay && caseTemp >= 0 && caseTemp <= 5) {
             while (caseTemp != 6) {
                 if (gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3) {
-                    addLogMessage("Joueur 1 récupère " + gameState.get(caseTemp) + " billes à la case " + (caseTemp+1));
+                    addLogMessage("Joueur 1 récupère " + gameState.get(caseTemp) + " billes dans une case ");
                     res += gameState.get(caseTemp);
                     gameState.set(caseTemp, 0);
                     caseTemp++;
@@ -486,7 +491,7 @@ public class Controller implements Initializable {
         } else if (!whoPlay && caseTemp >= 6 && caseTemp <= 11) {
             while (caseTemp != 5) {
                 if (gameState.get(caseTemp) == 2 || gameState.get(caseTemp) == 3) {
-                    addLogMessage("Joueur 2 récupère " + gameState.get(caseTemp) + " billes à la case " + (caseTemp+1));
+                    addLogMessage("Joueur 2 récupère " + gameState.get(caseTemp) + " billes dans une case ");
                     res += gameState.get(caseTemp);
                     gameState.set(caseTemp, 0);
                     caseTemp--;
@@ -494,19 +499,23 @@ public class Controller implements Initializable {
                     caseTemp = 5;
                 }
             }
-        } else {
-            addLogMessage("Pas de point ce tour ci");
         }
+        
         return res;
     }
 
-    public void makeAMove(MouseEvent event){
+    public void makeAMove(MouseEvent event) throws InterruptedException {
         final Node source = (Node) event.getSource();
         String id = source.getId();
         int caseNumber = Integer.parseInt(id) - 1;
 
         int nombreBilles = gameState.get(caseNumber);
         int caseTemp, newPoints;
+
+        if (isEffectTicked()) {
+            effectPlayer.play();
+            effectPlayer.stop();
+        }
 
         if (!partieEnCours){
             sendAlertInfo("Vous devez relancer une partie pour jouer", "Partie finie");
@@ -537,7 +546,6 @@ public class Controller implements Initializable {
                 displayGagnant();
             }else{
                 whoPlay = !whoPlay;
-                playerRound();
             }
 
         }
@@ -607,11 +615,9 @@ public class Controller implements Initializable {
 
     public int getNbBillePlateauJ1(){
         int res = 0;
-
-        for(int i = 0; i < 6; i ++){
+        for (int i = 0; i < 6; i ++) {
             res += gameState.get(i);
         }
-
         return res;
     }
 
@@ -630,5 +636,4 @@ public class Controller implements Initializable {
             gameStatePreviousPlay.set(i, gameState.get(i));
         }
     }
-
 }
