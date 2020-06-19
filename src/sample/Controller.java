@@ -15,11 +15,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.util.*;
 
@@ -145,18 +145,65 @@ public class Controller implements Initializable {
     }
 
     /**
-     *
-     * @param actionEvent
+     * Load a saved game.
      */
-    public void loadGame(ActionEvent actionEvent) {
+    public void loadGame() throws IOException {
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("Open a HTML file");
+        File file = chooser.showOpenDialog(new Stage());
+
+        BufferedReader br = new BufferedReader(new FileReader(file));
+
+        String st = br.readLine();
+        List<String> stringList = new ArrayList<>(Arrays.asList(st.split(",")));
+
+        for (int i = 0; i < 12 ; i++) {
+                gameState.set(i, Integer.parseInt(stringList.get(i)));
+        }
+
+        grainesJ1_value = Integer.parseInt(br.readLine());
+        grainesJ2_value = Integer.parseInt(br.readLine());
+        grainesJ1_value_previous = Integer.parseInt(br.readLine());
+        grainesJ2_value_previous = Integer.parseInt(br.readLine());
+
+        String st2 = br.readLine();
+        List<String> stringList2 = new ArrayList<>(Arrays.asList(st2.split(",")));
+
+        for (int i = 0; i < 12 ; i++) {
+            gameStatePreviousPlay.set(i, Integer.parseInt(stringList2.get(i)));
+        }
+
+        updateView();
     }
 
     /**
-     *
-     * @param actionEvent
+     * Function to save the game.
      */
-    public void saveGame(ActionEvent actionEvent) {
+    public void saveGame() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save file");
+        fileChooser.setInitialFileName("nameYourFile");
+        File savedFile = fileChooser.showSaveDialog(new Stage());
 
+        try (FileWriter writtenFile = new FileWriter(savedFile, false)) {
+            for (Integer nb_seeds : gameState.subList(0,12)) {
+                writtenFile.write(nb_seeds.toString());
+                writtenFile.write(",");
+            }
+            writtenFile.write("\n");
+            writtenFile.write(String.valueOf(grainesJ1_value));
+            writtenFile.write("\n");
+            writtenFile.write(String.valueOf(grainesJ2_value));
+            writtenFile.write("\n");
+            writtenFile.write(String.valueOf(grainesJ1_value_previous));
+            writtenFile.write("\n");
+            writtenFile.write(String.valueOf(grainesJ2_value_previous));
+            writtenFile.write("\n");
+            for (Integer nb_previous_seeds : gameStatePreviousPlay.subList(0,12)) {
+                writtenFile.write(nb_previous_seeds.toString());
+                writtenFile.write(",");
+            }
+        }
     }
 
     /**
@@ -183,20 +230,11 @@ public class Controller implements Initializable {
     }
 
     /**
-     * Quand il ne reste qu'au plus 10 graines sur le plateau, le joueur qui a la main peut proposer
-     * l'abandon de la partie. S'il est accepté, les deux joueurs se partagent les graines restantes.
-     *
-     *          * Règle 9 :
-     *          * boolean whoPlayed
-     *          * true : joueur 1
-     *          * false : joueur 2
-     *          * 48 - scoreJoueur1 - scoreJoueur2;
-     *          *
-     *          * Partage en deux
-     *
+     * When there is less than 10 marbles on the board, the player can ask to stop the game.
+     * If the other player accepts, the two players share the remaining marbles.
      * TODO function pas finie
      */
-    public void stopGame(ActionEvent actionEvent) {
+    public void stopGame() {
 
         int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
 
@@ -229,11 +267,10 @@ public class Controller implements Initializable {
     }
 
     /**
-     *
-     * @param actionEvent
+     * Cancel the previous move.
      */
-    public void cancel(ActionEvent actionEvent) {
-        for(int i = 0; i<12; i++){
+    public void cancel() {
+        for(int i = 0; i < 12; i++){
             gameState.set(i, gameStatePreviousPlay.get(i));
         }
         grainesJ1_value = grainesJ1_value_previous;
