@@ -76,7 +76,7 @@ public class Controller implements Initializable {
     public TextField number1, number2, number3, number4, number5, number6, number7, number8, number9, number10, number11, number12;
 
     // Music variables
-    public MediaPlayer mediaPlayer, effectPlayer;
+    public MediaPlayer mediaPlayer, effectPlayer, pavard, zinedine, airhorn;
 
     // create random object
     Random random = new Random();
@@ -113,6 +113,18 @@ public class Controller implements Initializable {
         Media sound2 = new Media(new File(effectFile).toURI().toString());
         effectPlayer = new MediaPlayer(sound2);
 
+        String pavardFile = "src/Pavard.mp3";
+        Media sound3 = new Media(new File(pavardFile).toURI().toString());
+        pavard = new MediaPlayer(sound3);
+
+        String zinedineFile = "src/Zinedine.mp3";
+        Media sound5 = new Media(new File(zinedineFile).toURI().toString());
+        zinedine = new MediaPlayer(sound5);
+
+        String airhornFile = "src/AirHorn.mp3";
+        Media sound4 = new Media(new File(airhornFile).toURI().toString());
+        airhorn = new MediaPlayer(sound4);
+
         newGame();
     }
 
@@ -130,6 +142,10 @@ public class Controller implements Initializable {
             gameStatePreviousPlay.set(i, 4);
             gameStateTampon.set(i, 4);
         }
+
+        pavard.stop();
+        zinedine.stop();
+        airhorn.stop();
 
         grainesJ1_value = 0;
         grainesJ2_value = 0;
@@ -213,21 +229,12 @@ public class Controller implements Initializable {
     /**
      * If a player hits the button surrender, the other player immediately wins.
      * Then another game is loaded.
+     * TODO PAS FINI
      */
     public void surrender() {
-        String gagnant, perdant;
-        if (whoPlay) {
-            gagnant = " 2";
-            perdant = " 1";
-        } else {
-            gagnant = " 1";
-            perdant = " 2";
-        }
-        sendAlertInfo("Abandon du joueur" + perdant + ". Joueur " + gagnant + "a gagné !", "Résultat de la partie");
-        partieEnCours = false;
-        addLogMessage("");
-        addLogMessage("");
-        addLogMessage("Si vous souhaitez rejouer, lancez une nouvelle partie.");
+        // Message dans les logs ou popup
+        sendAlertInfo("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
+        newGame();
     }
 
     /**
@@ -626,16 +633,16 @@ public class Controller implements Initializable {
         }
 
         if (!partieEnCours){
-            sendAlertInfo("Vous devez relancer une partie pour jouer.", "Partie finie");
+            sendAlertInfo("Vous devez relancer une partie pour jouer", "Partie finie");
 
         } else if (whoPlay && (caseNumber >= 0 && caseNumber <= 5)) {
-            sendAlertInfo("C'est le tour du joueur 1, pas le votre.", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 1, pas le votre", "Impossible !");
 
         } else if (!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)) {
-            sendAlertInfo("C'est le tour du joueur 2, pas le votre.", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 2, pas le votre", "Impossible !");
 
         } else if (nombreBilles == 0) {
-            sendAlertInfo("Vous devez jouer une case contenant des graines.", "Impossible !");
+            sendAlertInfo("Vous devez jouer une case ", "Impossible !");
 
         } else {
             if(nourrirAdverPossible()){
@@ -648,7 +655,7 @@ public class Controller implements Initializable {
                     addLogMessage("Vous devez nourrir votre adversaire !");
 
                 }else if(billesRestanteAdvAvantCoup == newPoints -  nombreBilles && newPoints != 0){
-                    addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire.");
+                    addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire");
                     savePreviousPlay();
                     caseTemp = distribuerBille(caseNumber);
                     whoPlay = !whoPlay;
@@ -659,6 +666,7 @@ public class Controller implements Initializable {
                     caseTemp = distribuerBille(caseNumber);
                     newPoints = ramasseBilles(caseTemp);
 
+                    jouerUnCommentaire(newPoints);
 
                     if (whoPlay) {
                         grainesJ1_value_previous = grainesJ1_value;
@@ -684,8 +692,17 @@ public class Controller implements Initializable {
         updateView();
     }
 
-    public void playCommentaire(){
-        
+    public void jouerUnCommentaire(int pointFait){
+
+        if(grainesJ1_value > 10 && grainesJ1_value == grainesJ2_value){
+            pavard.play();
+        }else if(pointFait == 0){
+            if(whoPlay && grainesJ2_value - grainesJ1_value > 15){
+                zinedine.play();
+            }else if(!whoPlay && grainesJ1_value - grainesJ2_value > 15){
+                zinedine.play();
+            }
+        }
     }
 
     public boolean nourrirAdverPossible(){
@@ -743,6 +760,8 @@ public class Controller implements Initializable {
                     " Le " + gagnant + " gagne !"
                     , "Fin de la partie.");
         }
+
+        airhorn.play();
     }
 
     public boolean finDePartie(){
