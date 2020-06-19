@@ -67,7 +67,7 @@ public class Controller implements Initializable {
     public TextArea logs;
 
     @FXML
-    public CheckMenuItem musicCheck, boardChecked, hoverChecked, effectCheck;
+    public CheckMenuItem musicCheck, boardChecked, hoverChecked, effectCheck, commentCheck;
 
     @FXML
     public RadioButton debutant, moyen;
@@ -236,7 +236,6 @@ public class Controller implements Initializable {
     /**
      * When there is less than 10 marbles on the board, the player can ask to stop the game.
      * If the other player accepts, the two players share the remaining marbles.
-     * TODO function pas finie
      */
     public void stopGame() {
 
@@ -253,19 +252,12 @@ public class Controller implements Initializable {
                  grainesJ2_value += totalGraines / 2;
                  updateView();
 
-                 // TODO DISPLAY LE GAGNANT PLUS LONGTEMPS ???
                 displayGagnant();
                 partieEnCours = false;
 
-                Alert alert2 = new Alert(Alert.AlertType.CONFIRMATION);
-                alert2.setTitle("Nouvelle partie");
-                alert2.setContentText("Voulez-vous recommencer une partie ?");
-
-                Optional<ButtonType> option2 = alert2.showAndWait();
-
-                if (option2.get() == ButtonType.OK) {
-                    newGame();
-                }
+                addLogMessage("");
+                addLogMessage("");
+                addLogMessage("Si vous souhaitez rejouer, lancez une nouvelle partie.");
             }
         }
     }
@@ -319,6 +311,11 @@ public class Controller implements Initializable {
         } else {
             return false;
         }
+    }
+
+    //TODO COMMENTAAAAIRES
+    public void commentPlay(ActionEvent actionEvent) {
+
     }
 
     /**
@@ -825,4 +822,5 @@ public class Controller implements Initializable {
             gameStateTampon.set(i, gameState.get(i));
         }
     }
+
 }
