@@ -102,7 +102,7 @@ public class Controller implements Initializable {
 
         debutant.setSelected(true);
 
-        String musicFile = "src/test.mp3";
+        String musicFile = "src/winter.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
 
@@ -286,6 +286,7 @@ public class Controller implements Initializable {
     public void musicPlay() {
         if (musicCheck.isSelected()) {
             mediaPlayer.play();
+            mediaPlayer.setVolume(0.2);
         } else {
             mediaPlayer.stop();
         }
