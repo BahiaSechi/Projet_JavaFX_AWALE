@@ -213,12 +213,21 @@ public class Controller implements Initializable {
     /**
      * If a player hits the button surrender, the other player immediately wins.
      * Then another game is loaded.
-     * TODO PAS FINI
      */
     public void surrender() {
-        // Message dans les logs ou popup
-        sendAlertInfo("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
-        newGame();
+        String gagnant, perdant;
+        if (whoPlay) {
+            gagnant = " 2";
+            perdant = " 1";
+        } else {
+            gagnant = " 1";
+            perdant = " 2";
+        }
+        sendAlertInfo("Abandon du joueur" + perdant + ". Joueur " + gagnant + "a gagné !", "Résultat de la partie");
+        partieEnCours = false;
+        addLogMessage("");
+        addLogMessage("");
+        addLogMessage("Si vous souhaitez rejouer, lancez une nouvelle partie.");
     }
 
     /**
@@ -617,16 +626,16 @@ public class Controller implements Initializable {
         }
 
         if (!partieEnCours){
-            sendAlertInfo("Vous devez relancer une partie pour jouer", "Partie finie");
+            sendAlertInfo("Vous devez relancer une partie pour jouer.", "Partie finie");
 
         } else if (whoPlay && (caseNumber >= 0 && caseNumber <= 5)) {
-            sendAlertInfo("C'est le tour du joueur 1, pas le votre", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 1, pas le votre.", "Impossible !");
 
         } else if (!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)) {
-            sendAlertInfo("C'est le tour du joueur 2, pas le votre", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 2, pas le votre.", "Impossible !");
 
         } else if (nombreBilles == 0) {
-            sendAlertInfo("Vous devez jouer une case ", "Impossible !");
+            sendAlertInfo("Vous devez jouer une case contenant des graines.", "Impossible !");
 
         } else {
             if(nourrirAdverPossible()){
@@ -639,7 +648,7 @@ public class Controller implements Initializable {
                     addLogMessage("Vous devez nourrir votre adversaire !");
 
                 }else if(billesRestanteAdvAvantCoup == newPoints -  nombreBilles && newPoints != 0){
-                    addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire");
+                    addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire.");
                     savePreviousPlay();
                     caseTemp = distribuerBille(caseNumber);
                     whoPlay = !whoPlay;
