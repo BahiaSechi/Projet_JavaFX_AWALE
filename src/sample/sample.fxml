@@ -38,8 +38,8 @@
                             <items>
                                 <CheckMenuItem fx:id="hoverChecked" mnemonicParsing="false" text="Voir graines" />
                                 <CheckMenuItem fx:id="boardChecked" mnemonicParsing="false" onAction="#boardDisplay" text="Voir plateau" />
-                                <CheckMenuItem fx:id="effectCheck" mnemonicParsing="false" onAction="#isEffectTicked" text="Bruitages" />
-                                <CheckMenuItem fx:id="commentCheck" mnemonicParsing="false" onAction="#commentPlay" text="Commentaires" />
+                                <CheckMenuItem fx:id="effectCheck" mnemonicParsing="false" text="Bruitages" />
+                                <CheckMenuItem fx:id="commentCheck" mnemonicParsing="false" text="Commentaires" />
                                 <CheckMenuItem fx:id="musicCheck" mnemonicParsing="false" onAction="#musicPlay" text="Musique" />
                             </items>
                         </Menu>

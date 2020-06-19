@@ -230,7 +230,7 @@ public class Controller implements Initializable {
      */
     public boolean egalite() {
         int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
-        return totalGraines < 6 && (grainesJ1_value <= 24 || grainesJ2_value <= 24);
+        return totalGraines < 6 && (grainesJ1_value <= 24 && grainesJ2_value <= 24);
     }
 
     /**
@@ -673,6 +673,10 @@ public class Controller implements Initializable {
 
         }
         updateView();
+    }
+
+    public void playCommentaire(){
+        
     }
 
     public boolean nourrirAdverPossible(){
