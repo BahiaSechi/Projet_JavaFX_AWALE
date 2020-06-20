@@ -90,6 +90,7 @@ public class Controller implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //Initialisation des listes
         this.gameState = new ArrayList<>(12);
         this.gameStatePreviousPlay = new ArrayList<>(12);
         this.gameStateTampon = new ArrayList<>(12);
@@ -100,11 +101,14 @@ public class Controller implements Initializable {
             gameStateTampon.add(4);
         }
 
+        //Initialisation du Journal
         logs.setEditable(false);
         logs.setFocusTraversable(false);
 
+        //Selection du mode de jeu à l'initialisation
         debutant.setSelected(true);
 
+        //Chargement des fichiers audios : musique, bruitage et commentaires
         String musicFile = "src/winter.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
@@ -125,7 +129,13 @@ public class Controller implements Initializable {
         Media sound4 = new Media(new File(airhornFile).toURI().toString());
         airhorn = new MediaPlayer(sound4);
 
-        newGame();
+
+        //Chargement d'une nouvelle partie
+        try {
+            newGame();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // FUNCTIONS : MENU FICHIER
@@ -133,26 +143,31 @@ public class Controller implements Initializable {
     /**
      * Create a new game.
      */
-    public void newGame() {
+    public void newGame() throws IOException {
+        //Nettoyage du journal
         clearLogs();
         addLogMessage("Nouvelle partie !");
 
+        //Initialisation du nombre de graine
         for (int i = 0; i < 12; i++) {
             gameState.set(i, 4);
             gameStatePreviousPlay.set(i, 4);
             gameStateTampon.set(i, 4);
         }
 
+        //On éteint les commentaires
         pavard.stop();
         zinedine.stop();
         airhorn.stop();
 
+        //On set les scores à 0
         grainesJ1_value = 0;
         grainesJ2_value = 0;
         grainesJ1_value_previous = 0;
         grainesJ2_value_previous = 0;
         partieEnCours = true;
 
+        //On détermine un premier joueur aléatoirement
         whoPlay = random.nextBoolean();
         if (whoPlay) {
             addLogMessage("Le joueur 1 commence.");
@@ -160,6 +175,7 @@ public class Controller implements Initializable {
             addLogMessage("Le joueur 2 commence.");
         }
 
+        //On nettoie la mémoire du coup précédent et on met à jour la vue
         savePreviousPlay();
         updateView();
     }
@@ -168,6 +184,7 @@ public class Controller implements Initializable {
      * Load a saved game.
      */
     public void loadGame() throws IOException {
+        //Selection du fichier
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open a HTML file");
         File file = chooser.showOpenDialog(new Stage());
@@ -200,11 +217,13 @@ public class Controller implements Initializable {
      * Function to save the game.
      */
     public void saveGame() throws IOException {
+        //Selection du fichier
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save file");
         fileChooser.setInitialFileName("nameYourFile");
         File savedFile = fileChooser.showSaveDialog(new Stage());
 
+        //Ecriture de l'état du plateau, du coup précédent et des scores
         try (FileWriter writtenFile = new FileWriter(savedFile, false)) {
             for (Integer nb_seeds : gameState.subList(0,12)) {
                 writtenFile.write(nb_seeds.toString());
@@ -231,7 +250,7 @@ public class Controller implements Initializable {
      * Then another game is loaded.
      * TODO PAS FINI
      */
-    public void surrender() {
+    public void surrender() throws IOException {
         // Message dans les logs ou popup
         sendAlertInfo("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
         newGame();
@@ -253,7 +272,7 @@ public class Controller implements Initializable {
      * When there is less than 10 marbles on the board, the player can ask to stop the game.
      * If the other player accepts, the two players share the remaining marbles.
      */
-    public void stopGame() {
+    public void stopGame() throws IOException {
 
         int totalGraines = 48 - grainesJ1_value - grainesJ2_value;
 
@@ -327,11 +346,6 @@ public class Controller implements Initializable {
         } else {
             return false;
         }
-    }
-
-    //TODO COMMENTAAAAIRES
-    public void commentPlay(ActionEvent actionEvent) {
-
     }
 
     /**
@@ -505,6 +519,11 @@ public class Controller implements Initializable {
         logs.setText("");
     }
 
+    /**
+     * Distribue les billes d'une case sélectionnée vers les cases suivantes
+     * @param caseNumber : correspond à la case joué
+     * @return : l'indice de la dernière case atteinte en distribuant les billes
+     */
     public int distribuerBille(int caseNumber){
         int caseTemp = caseNumber;
         int nombreBilles = gameState.get(caseNumber);
@@ -531,6 +550,10 @@ public class Controller implements Initializable {
         return caseTemp;
     }
 
+    /**
+     * Fonction similire à la précédente mais qui sert cette fois-ci à prévisualiser le coup du joueur.
+     * Cette méthode est utile pour savoir si un coup peut potentiellement affamer son adversaire
+     */
     public int distribuerBilleTampon(int caseNumber){
         int caseTemp = caseNumber;
         int nombreBilles = gameStateTampon.get(caseNumber);
@@ -557,6 +580,11 @@ public class Controller implements Initializable {
         return caseTemp;
     }
 
+    /**
+     * Fonction qui permet de ramasser les billes dans les cases en ayant que 2 ou 3.
+     * @param caseTemp : correspond à la case à partir de laquelle il faut ramasser les billes.
+     * @return : Le nombre de billes ramassée par le coup.
+     */
     public int ramasseBilles(int caseTemp) {
         int res = 0;
 
@@ -588,6 +616,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction similaire à la précédente mais qui sert encore une fois à constater les effets d'un coup.
+     * Cette fonction sert à ne pas affamer son adversaire.
+     */
     public int ramasseBillesTampon(int caseTemp) {
         int res = 0;
 
@@ -618,20 +650,29 @@ public class Controller implements Initializable {
         return res;
     }
 
-    public void makeAMove(MouseEvent event) throws InterruptedException {
+    /**
+     * Fonction principale pour jouer
+     * @param event : Nous permet de savoir quelle case est jouée
+     * @throws InterruptedException
+     */
+    public void makeAMove(MouseEvent event) throws InterruptedException, IOException {
+        //On récupère l'indice de la case jouée
         final Node source = (Node) event.getSource();
         String id = source.getId();
         int caseNumber = Integer.parseInt(id) - 1;
 
+        //Initialisation de quelques variables.
         int nombreBilles = gameState.get(caseNumber);
         int caseTemp, newPoints;
         int billesRestanteAdvAvantCoup;
 
+        //Joue un bruitage
         if (isEffectTicked()) {
             effectPlayer.play();
             effectPlayer.stop();
         }
 
+        //On vérifie : Que la partie est en cours, que le joueur clique bien sur sa moitié du terrain et que la case n'est pas vide.
         if (!partieEnCours){
             sendAlertInfo("Vous devez relancer une partie pour jouer", "Partie finie");
 
@@ -645,12 +686,15 @@ public class Controller implements Initializable {
             sendAlertInfo("Vous devez jouer une case ", "Impossible !");
 
         } else {
+            //On regarde d'abord si il existe bien un coup permettant de nourrir son adversaire dans le cas ou ce dernier n'a plus de bille
             if(nourrirAdverPossible()){
+                //On calcul à l'avance l'impact du coup joué
                 chargerTampon();
                 billesRestanteAdvAvantCoup = billesRestanteAdversaire();
                 caseTemp = distribuerBilleTampon(caseNumber);
                 newPoints = ramasseBillesTampon(caseTemp);
 
+                //On s'assure que le joueur nourrit son adversaire si besoin ou ne l'affame pas
                 if(billesRestanteAdvAvantCoup == 0 && billesRestanteAdversaire() == 0){
                     addLogMessage("Vous devez nourrir votre adversaire !");
 
@@ -661,13 +705,13 @@ public class Controller implements Initializable {
                     whoPlay = !whoPlay;
 
                 }else {
+                    //Si le coup est jouable, on le joue
                     savePreviousPlay();
 
                     caseTemp = distribuerBille(caseNumber);
                     newPoints = ramasseBilles(caseTemp);
 
-                    jouerUnCommentaire(newPoints);
-
+                    //Mise à jour des scores
                     if (whoPlay) {
                         grainesJ1_value_previous = grainesJ1_value;
                         grainesJ1_value += newPoints;
@@ -676,6 +720,9 @@ public class Controller implements Initializable {
                         grainesJ2_value += newPoints;
                     }
 
+                    jouerUnCommentaire(newPoints);
+
+                    //On regarde si la partie est finie ou si on la continue
                     if(finDePartie()){
                         displayGagnant();
                     }else{
@@ -683,7 +730,7 @@ public class Controller implements Initializable {
                     }
                 }
             }
-
+            //Si la partie est finie, on affiche le gagnant
             if(finDePartie()){
                 displayGagnant();
             }
@@ -692,7 +739,12 @@ public class Controller implements Initializable {
         updateView();
     }
 
+    /**
+     * Fonction permettant de jouer un commentaire audio dans certains cas déterminé à partir des scores
+     * @param pointFait : Le nombre de point marqué par un coup
+     */
     public void jouerUnCommentaire(int pointFait){
+
 
         if(grainesJ1_value > 10 && grainesJ1_value == grainesJ2_value){
             pavard.play();
@@ -705,6 +757,10 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Fonction qui détermine s'il existe un coup permettant de nourrir son adversaire quand ce dernier n'a plus de bille
+     * @return
+     */
     public boolean nourrirAdverPossible(){
         boolean res = true;
 
@@ -729,6 +785,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui retourne le nombre de  bille restante à l'adversaire
+     * @return
+     */
     public int billesRestanteAdversaire(){
         int res = 0;
         if(whoPlay){
@@ -744,7 +804,10 @@ public class Controller implements Initializable {
         return res;
     }
 
-    public void displayGagnant(){
+    /**
+     * Fonction pour afficher le gagnant de la partie
+     */
+    public void displayGagnant() throws IOException {
         String gagnant = "Joueur 1";
 
         if(egalite()){
@@ -761,9 +824,20 @@ public class Controller implements Initializable {
                     , "Fin de la partie.");
         }
 
+        if (grainesJ1_value >= grainesJ2_value){
+            enregistrerTop100(grainesJ1_value);
+        }else{
+            enregistrerTop100(grainesJ2_value);
+        }
+
+        afficheTop100();
         airhorn.play();
     }
 
+    /**
+     * Fonction qui détermine si la partie est finie selon différent critères
+     * @return
+     */
     public boolean finDePartie(){
         boolean res = false;
 
@@ -804,6 +878,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui détermine si la partie est finie selon la règle pour joueur débutant
+     * @return
+     */
     public boolean finPartieDebutant(){
         boolean res = false;
         int resteJ1 = getNbBillePlateauJ1();
@@ -816,6 +894,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui détermine si la partie est finie selon la règle pour joueur moyen
+     * @return
+     */
     public boolean finPartieMoyen(){
         boolean res = false;
 
@@ -825,6 +907,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui retourne le nombre de billes sur le plateau du joueur 1
+     * @return
+     */
     public int getNbBillePlateauJ1(){
         int res = 0;
         for (int i = 0; i < 6; i ++) {
@@ -833,6 +919,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui retourne le nombre de billes sur le plateau du joueur 2
+     * @return
+     */
     public int getNbBillePlateauJ2(){
         int res = 0;
 
@@ -843,16 +933,116 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui enregistre l'état du plateau actuel afin de pouvoir faire "annuler coup" plus tard, si besoin
+     */
     public void savePreviousPlay(){
         for(int i = 0; i < 12; i ++){
             gameStatePreviousPlay.set(i, gameState.get(i));
         }
     }
 
+    /**
+     * Fonction qui charge dans la liste tampon l'état du plateau afin de faire des calculs à l'avance sur un coup joué
+     */
     public void chargerTampon(){
         for(int i = 0; i < 12; i ++){
             gameStateTampon.set(i, gameState.get(i));
         }
     }
 
+    /**
+     * Fonction qui regarde si le joueur à sa place dans le top 100
+     */
+    public boolean nouveauRecord(int score) throws IOException {
+        boolean res = false;
+
+        File scoreFile = new File("scoreTop100.txt");
+
+        BufferedReader br = new BufferedReader(new FileReader(scoreFile));
+        String st;
+        List<String> stringList;
+
+        for (int i = 0; i < 100 ; i ++) {
+            st = br.readLine();
+            stringList = new ArrayList<>(Arrays.asList(st.split(",")));
+            if(Integer.parseInt(stringList.get(1)) < score){
+                res = true;
+            }
+        }
+
+        return res;
+    }
+
+    /**
+     * Fonction qui enregistre le joueur si il le mérite
+     */
+    public void enregistrerTop100(int score) throws IOException {
+        String nomGagnant = "Jean";
+        boolean enregistre = false;
+        List<String> top100 = new ArrayList<String>(200);
+
+        //On récupère le nom du gagnant et on l'affiche
+        TextInputDialog dialog = new TextInputDialog("Smith");
+        dialog.setTitle("Victoire !");
+        dialog.setHeaderText("Votre entrée dans le top 100 (peut-être)");
+        dialog.setContentText("Veuillez indiquer votre nom :");
+
+        Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()){
+            nomGagnant = result.get();
+        }
+
+        //On regarde la liste des scores
+        File scoreFile = new File("src/scoreTop100.txt");
+
+        BufferedReader br = new BufferedReader(new FileReader(scoreFile));
+        String st;
+        List<String> stringList;
+
+        for (int i = 0; i < 100 ; i ++) {
+            st = br.readLine();
+            stringList = new ArrayList<>(Arrays.asList(st.split(",")));
+
+            if(Integer.parseInt(stringList.get(1)) < score && !enregistre){
+                top100.add(nomGagnant);
+                top100.add(Integer.toString(score));
+                i++;
+                enregistre = true;
+            }
+
+            top100.add(stringList.get(0));
+            top100.add(stringList.get(1));
+        }
+
+        //Ecriture des scores à jour dans le fichier
+        try (FileWriter writtenFile = new FileWriter(scoreFile, false)) {
+            for(int i = 0; i < 200; i++){
+                writtenFile.write(top100.get(i));
+                writtenFile.write(",");
+                if(i%2 == 1){
+                    writtenFile.write("\n");
+                }
+            }
+        }
+
+    }
+
+    /**
+     * Fonction qui affiche le top 100 des joueurs
+     */
+    public void afficheTop100() throws IOException {
+        File scoreFile = new File("src/scoreTop100.txt");
+
+        BufferedReader br = new BufferedReader(new FileReader(scoreFile));
+        String st;
+        List<String> stringList;
+
+        for (int i = 0; i < 100 ; i ++) {
+            st = br.readLine();
+            stringList = new ArrayList<>(Arrays.asList(st.split(",")));
+
+            System.out.println(i + " : " + stringList.get(0) + " " + stringList.get(1) + " graines");
+        }
+    }
 }
