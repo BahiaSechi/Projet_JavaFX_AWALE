@@ -1,7 +1,6 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,9 +23,11 @@ import java.net.URL;
 import java.util.*;
 
 /**
+ * Allows to manage the main view of the game.
+ *
  * Address :
  * ENSICAEN
- * 6 Boulevard Maréchal Juin
+ * 6 Boulevard Maréchal Juin
  * F-14050 Caen Cedex
  *
  * Note :
@@ -34,14 +35,13 @@ import java.util.*;
  * document may be reproduced, copied  or revised without written
  * permission of the authors.
  *
- * @author BURON Manfred <manfred.buron@ecole.ensicaen.fr>
- * @author Bahia SECHI <bahia.sechi@ecole.ensicaen.fr>
+ * @author BURON Manfred manfred.buron@ecole.ensicaen.fr
+ * @author Bahia SECHI bahia.sechi@ecole.ensicaen.fr
  * @version 1.0
  */
 
 public class Controller implements Initializable {
 
-    public boolean isGameLaunched;
     public List<Integer> gameState;
     public List<Integer> gameStatePreviousPlay;
     public List<Integer> gameStateTampon;
@@ -90,6 +90,7 @@ public class Controller implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        //Initialisation des listes
         this.gameState = new ArrayList<>(12);
         this.gameStatePreviousPlay = new ArrayList<>(12);
         this.gameStateTampon = new ArrayList<>(12);
@@ -100,31 +101,35 @@ public class Controller implements Initializable {
             gameStateTampon.add(4);
         }
 
+        //Initialisation du Journal
         logs.setEditable(false);
         logs.setFocusTraversable(false);
 
+        //Selection du mode de jeu à l'initialisation
         debutant.setSelected(true);
 
-        String musicFile = "src/winter.mp3";
+        //Chargement des fichiers audios : musique, bruitage et commentaires
+        String musicFile = "src/sound/winter.mp3";
         Media sound = new Media(new File(musicFile).toURI().toString());
         mediaPlayer = new MediaPlayer(sound);
 
-        String effectFile = "src/marble.wav";
+        String effectFile = "src/sound/marble.wav";
         Media sound2 = new Media(new File(effectFile).toURI().toString());
         effectPlayer = new MediaPlayer(sound2);
 
-        String pavardFile = "src/Pavard.mp3";
+        String pavardFile = "src/sound/Pavard.mp3";
         Media sound3 = new Media(new File(pavardFile).toURI().toString());
         pavard = new MediaPlayer(sound3);
 
-        String zinedineFile = "src/Zinedine.mp3";
+        String zinedineFile = "src/sound/Zinedine.mp3";
         Media sound5 = new Media(new File(zinedineFile).toURI().toString());
         zinedine = new MediaPlayer(sound5);
 
-        String airhornFile = "src/AirHorn.mp3";
+        String airhornFile = "src/sound/AirHorn.mp3";
         Media sound4 = new Media(new File(airhornFile).toURI().toString());
         airhorn = new MediaPlayer(sound4);
 
+        //Chargement d'une nouvelle partie
         newGame();
     }
 
@@ -134,25 +139,30 @@ public class Controller implements Initializable {
      * Create a new game.
      */
     public void newGame() {
+        //Nettoyage du journal
         clearLogs();
         addLogMessage("Nouvelle partie !");
 
+        //Initialisation du nombre de graine
         for (int i = 0; i < 12; i++) {
             gameState.set(i, 4);
             gameStatePreviousPlay.set(i, 4);
             gameStateTampon.set(i, 4);
         }
 
+        //On éteint les commentaires
         pavard.stop();
         zinedine.stop();
         airhorn.stop();
 
+        //On set les scores à 0
         grainesJ1_value = 0;
         grainesJ2_value = 0;
         grainesJ1_value_previous = 0;
         grainesJ2_value_previous = 0;
         partieEnCours = true;
 
+        //On détermine un premier joueur aléatoirement
         whoPlay = random.nextBoolean();
         if (whoPlay) {
             addLogMessage("Le joueur 1 commence.");
@@ -160,14 +170,17 @@ public class Controller implements Initializable {
             addLogMessage("Le joueur 2 commence.");
         }
 
+        //On nettoie la mémoire du coup précédent et on met à jour la vue
         savePreviousPlay();
         updateView();
     }
 
     /**
      * Load a saved game.
+     * @throws IOException if cannot load the game.
      */
     public void loadGame() throws IOException {
+        //Selection du fichier
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Open a HTML file");
         File file = chooser.showOpenDialog(new Stage());
@@ -177,6 +190,7 @@ public class Controller implements Initializable {
         String st = br.readLine();
         List<String> stringList = new ArrayList<>(Arrays.asList(st.split(",")));
 
+        //Mise-à-jour des valeurs du plateau
         for (int i = 0; i < 12 ; i++) {
                 gameState.set(i, Integer.parseInt(stringList.get(i)));
         }
@@ -198,13 +212,16 @@ public class Controller implements Initializable {
 
     /**
      * Function to save the game.
+     * @throws IOException if I/O exception occurred
      */
     public void saveGame() throws IOException {
+        //Selection du fichier
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save file");
         fileChooser.setInitialFileName("nameYourFile");
         File savedFile = fileChooser.showSaveDialog(new Stage());
 
+        //Ecriture de l'état du plateau, du coup précédent et des scores
         try (FileWriter writtenFile = new FileWriter(savedFile, false)) {
             for (Integer nb_seeds : gameState.subList(0,12)) {
                 writtenFile.write(nb_seeds.toString());
@@ -229,12 +246,13 @@ public class Controller implements Initializable {
     /**
      * If a player hits the button surrender, the other player immediately wins.
      * Then another game is loaded.
-     * TODO PAS FINI
      */
     public void surrender() {
-        // Message dans les logs ou popup
-        sendAlertInfo("Abandon du joueur X. Joueur X a gagné !", "Résultat de la partie");
-        newGame();
+        displayGagnant();
+        partieEnCours = false;
+        addLogMessage("");
+        addLogMessage("");
+        addLogMessage("Si vous souhaitez rejouer, lancez une nouvelle partie.");
     }
 
     /**
@@ -302,7 +320,7 @@ public class Controller implements Initializable {
     /**
      * If the checkbox is checked, it displays several TextFields where the player can see the number of seeds in each hole.
      */
-    public void boardDisplay() {
+    public void boardDisplay () {
         boolean visible = boardChecked.isSelected();
         number1.setVisible(visible);
         number2.setVisible(visible);
@@ -320,6 +338,7 @@ public class Controller implements Initializable {
 
     /**
      * Returns a boolean if the effect checkbox is ticked.
+     * @return true if the effect checkbox is ticked.
      */
     public boolean isEffectTicked() {
         if (effectCheck.isSelected()) {
@@ -327,11 +346,6 @@ public class Controller implements Initializable {
         } else {
             return false;
         }
-    }
-
-    //TODO COMMENTAAAAIRES
-    public void commentPlay(ActionEvent actionEvent) {
-
     }
 
     /**
@@ -348,7 +362,7 @@ public class Controller implements Initializable {
 
     /**
      * Displays a tooltip when hovering an image.
-     * @param mouseEvent
+     * @param mouseEvent detects if you entered the image.
      */
     public void hoverImage(MouseEvent mouseEvent) {
         final Node source = (Node) mouseEvent.getSource();
@@ -505,6 +519,11 @@ public class Controller implements Initializable {
         logs.setText("");
     }
 
+    /**
+     * Distribue les billes d'une case sélectionnée vers les cases suivantes
+     * @param caseNumber : correspond à la case joué
+     * @return : l'indice de la dernière case atteinte en distribuant les billes
+     */
     public int distribuerBille(int caseNumber){
         int caseTemp = caseNumber;
         int nombreBilles = gameState.get(caseNumber);
@@ -531,6 +550,13 @@ public class Controller implements Initializable {
         return caseTemp;
     }
 
+    /**
+     * Fonction similire à la précédente mais qui sert cette fois-ci à prévisualiser le coup du joueur.
+     * Cette méthode est utile pour savoir si un coup peut potentiellement affamer son adversaire
+     *
+     * @param caseNumber correspond à la case joué.
+     * @return caseTemp l'indice de la dernière case atteinte en distribuant les billes.
+     */
     public int distribuerBilleTampon(int caseNumber){
         int caseTemp = caseNumber;
         int nombreBilles = gameStateTampon.get(caseNumber);
@@ -557,6 +583,11 @@ public class Controller implements Initializable {
         return caseTemp;
     }
 
+    /**
+     * Fonction qui permet de ramasser les billes dans les cases en ayant que 2 ou 3.
+     * @param caseTemp : correspond à la case à partir de laquelle il faut ramasser les billes.
+     * @return : Le nombre de billes ramassée par le coup.
+     */
     public int ramasseBilles(int caseTemp) {
         int res = 0;
 
@@ -588,6 +619,13 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction similaire à la précédente mais qui sert encore une fois à constater les effets d'un coup.
+     * Cette fonction sert à ne pas affamer son adversaire.
+     *
+     * @param caseTemp Correspond à la case à partir de laquelle il faut ramasser les billes.
+     * @return res Le nombre de billes ramassées par le coup.
+     */
     public int ramasseBillesTampon(int caseTemp) {
         int res = 0;
 
@@ -614,60 +652,70 @@ public class Controller implements Initializable {
             }
 
         }
-
         return res;
     }
 
+    /**
+     * Fonction principale pour jouer
+     * @param event : Nous permet de savoir quelle case est jouée
+     * @throws InterruptedException if a thread is waiting, sleeping, or otherwise occupied
+     */
     public void makeAMove(MouseEvent event) throws InterruptedException {
+        //On récupère l'indice de la case jouée
         final Node source = (Node) event.getSource();
         String id = source.getId();
         int caseNumber = Integer.parseInt(id) - 1;
 
+        //Initialisation de quelques variables.
         int nombreBilles = gameState.get(caseNumber);
         int caseTemp, newPoints;
         int billesRestanteAdvAvantCoup;
 
+        //Joue un bruitage
         if (isEffectTicked()) {
             effectPlayer.play();
             effectPlayer.stop();
         }
 
+        //On vérifie : Que la partie est en cours, que le joueur clique bien sur sa moitié du terrain et que la case n'est pas vide.
         if (!partieEnCours){
-            sendAlertInfo("Vous devez relancer une partie pour jouer", "Partie finie");
-
+            sendAlertInfo("Vous devez relancer une partie pour jouer.", "Partie finie");
         } else if (whoPlay && (caseNumber >= 0 && caseNumber <= 5)) {
-            sendAlertInfo("C'est le tour du joueur 1, pas le votre", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 1, pas le votre.", "Impossible !");
 
         } else if (!whoPlay &&(caseNumber >= 6 && caseNumber <= 11)) {
-            sendAlertInfo("C'est le tour du joueur 2, pas le votre", "Impossible !");
+            sendAlertInfo("C'est le tour du joueur 2, pas le votre.", "Impossible !");
 
         } else if (nombreBilles == 0) {
-            sendAlertInfo("Vous devez jouer une case ", "Impossible !");
+            sendAlertInfo("Vous devez jouer une case contenant des graines.", "Impossible !");
 
         } else {
+            //On regarde d'abord si il existe bien un coup permettant de nourrir son adversaire dans le cas ou ce dernier n'a plus de bille
             if(nourrirAdverPossible()){
+                //On calcul à l'avance l'impact du coup joué
                 chargerTampon();
                 billesRestanteAdvAvantCoup = billesRestanteAdversaire();
                 caseTemp = distribuerBilleTampon(caseNumber);
                 newPoints = ramasseBillesTampon(caseTemp);
 
+                //On s'assure que le joueur nourrit son adversaire si besoin ou ne l'affame pas
                 if(billesRestanteAdvAvantCoup == 0 && billesRestanteAdversaire() == 0){
                     addLogMessage("Vous devez nourrir votre adversaire !");
 
                 }else if(billesRestanteAdvAvantCoup == newPoints -  nombreBilles && newPoints != 0){
-                    addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire");
+                    addLogMessage("Coup effectué mais vous ne ramassez aucune bille pour ne pas affamer votre adversaire.");
                     savePreviousPlay();
                     caseTemp = distribuerBille(caseNumber);
                     whoPlay = !whoPlay;
 
-                }else {
+                } else {
+                    //Si le coup est jouable, on le joue
                     savePreviousPlay();
 
                     caseTemp = distribuerBille(caseNumber);
                     newPoints = ramasseBilles(caseTemp);
 
-                    jouerUnCommentaire(newPoints);
-
+                    //Mise à jour des scores
                     if (whoPlay) {
                         grainesJ1_value_previous = grainesJ1_value;
                         grainesJ1_value += newPoints;
@@ -676,6 +724,9 @@ public class Controller implements Initializable {
                         grainesJ2_value += newPoints;
                     }
 
+                    jouerUnCommentaire(newPoints);
+
+                    //On regarde si la partie est finie ou si on la continue
                     if(finDePartie()){
                         displayGagnant();
                     }else{
@@ -683,7 +734,7 @@ public class Controller implements Initializable {
                     }
                 }
             }
-
+            //Si la partie est finie, on affiche le gagnant
             if(finDePartie()){
                 displayGagnant();
             }
@@ -692,7 +743,12 @@ public class Controller implements Initializable {
         updateView();
     }
 
+    /**
+     * Fonction permettant de jouer un commentaire audio dans certains cas déterminé à partir des scores
+     * @param pointFait : Le nombre de point marqué par un coup
+     */
     public void jouerUnCommentaire(int pointFait){
+
 
         if(grainesJ1_value > 10 && grainesJ1_value == grainesJ2_value){
             pavard.play();
@@ -705,6 +761,10 @@ public class Controller implements Initializable {
         }
     }
 
+    /**
+     * Fonction qui détermine s'il existe un coup permettant de nourrir son adversaire quand ce dernier n'a plus de bille
+     * @return true si on peut nourrir l'adversaire.
+     */
     public boolean nourrirAdverPossible(){
         boolean res = true;
 
@@ -729,6 +789,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui retourne le nombre de billes restantes à l'adversaire.
+     * @return nombre de billes restantes à l'adversaire.
+     */
     public int billesRestanteAdversaire(){
         int res = 0;
         if(whoPlay){
@@ -740,18 +804,20 @@ public class Controller implements Initializable {
                 res += gameStateTampon.get(i);
             }
         }
-
         return res;
     }
 
+    /**
+     * Fonction pour afficher le gagnant de la partie.
+     */
     public void displayGagnant(){
         String gagnant = "Joueur 1";
 
-        if(egalite()){
+        if (egalite()) {
             sendAlertInfo("La partie est finie ! " +
                     " Match nul !"
                     , "Fin de la partie.");
-        }else{
+        }else {
             if(grainesJ2_value > grainesJ1_value){
                 gagnant = "Joueur 2";
             }
@@ -760,10 +826,13 @@ public class Controller implements Initializable {
                     " Le " + gagnant + " gagne !"
                     , "Fin de la partie.");
         }
-
         airhorn.play();
     }
 
+    /**
+     * Fonction qui détermine si la partie est finie selon différent critères.
+     * @return true si la partie est finie.
+     */
     public boolean finDePartie(){
         boolean res = false;
 
@@ -779,21 +848,21 @@ public class Controller implements Initializable {
             }
         }
 
-        if(egalite()){
+        if (egalite()) {
             partieEnCours = false;
             res = true;
 
-        }else if(!nourrirAdverPossible()){
+        } else if(!nourrirAdverPossible()){
             partieEnCours = false;
             res = true;
 
 
-            if(whoPlay){
+            if (whoPlay) {
                 for(int i = 6; i < 12; i++){
                     grainesJ1_value += gameState.get(i);
                     gameState.set(i, 0);
                 }
-            }else{
+            } else {
                 for(int i = 0; i < 6; i++){
                     grainesJ2_value += gameState.get(i);
                     gameState.set(i, 0);
@@ -804,6 +873,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui détermine si la partie est finie selon la règle pour joueur débutant
+     * @return true si la partie est finie ; difficulte debutant.
+     */
     public boolean finPartieDebutant(){
         boolean res = false;
         int resteJ1 = getNbBillePlateauJ1();
@@ -816,6 +889,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui détermine si la partie est finie selon la règle pour joueur moyen
+     * @return true si la partie est finie ; difficulte moyen.
+     */
     public boolean finPartieMoyen(){
         boolean res = false;
 
@@ -825,6 +902,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui retourne le nombre de billes sur le plateau du joueur 1
+     * @return nombre de billes du plateau du J1.
+     */
     public int getNbBillePlateauJ1(){
         int res = 0;
         for (int i = 0; i < 6; i ++) {
@@ -833,6 +914,10 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui retourne le nombre de billes sur le plateau du joueur 2
+     * @return nombre de billes du plateau du J2.
+     */
     public int getNbBillePlateauJ2(){
         int res = 0;
 
@@ -843,16 +928,21 @@ public class Controller implements Initializable {
         return res;
     }
 
+    /**
+     * Fonction qui enregistre l'état du plateau actuel afin de pouvoir faire "annuler coup" plus tard, si besoin
+     */
     public void savePreviousPlay(){
         for(int i = 0; i < 12; i ++){
             gameStatePreviousPlay.set(i, gameState.get(i));
         }
     }
 
+    /**
+     * Fonction qui charge dans la liste tampon l'état du plateau afin de faire des calculs à l'avance sur un coup joué
+     */
     public void chargerTampon(){
         for(int i = 0; i < 12; i ++){
             gameStateTampon.set(i, gameState.get(i));
         }
     }
-
 }

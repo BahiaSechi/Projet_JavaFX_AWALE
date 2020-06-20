@@ -7,11 +7,36 @@ import javafx.scene.control.TextArea;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ *
+ * Allows to manage the rules view of the game.
+ *
+ * Address :
+ * ENSICAEN
+ * 6 Boulevard Maréchal Juin
+ * F-14050 Caen Cedex
+ *
+ * Note :
+ * This file is owned by an ENSICAEN student.  No portion of this
+ * document may be reproduced, copied  or revised without written
+ * permission of the authors.
+ *
+ * @author BURON Manfred manfred.buron@ecole.ensicaen.fr
+ * @author Bahia SECHI bahia.sechi@ecole.ensicaen.fr
+ * @version 1.0
+ */
+
 public class RulesController implements Initializable {
 
     @FXML
     public TextArea rulesArea;
 
+    /**
+     * Initializing the rules layout.
+     *
+     * @param location The location used to resolve relative paths for the root object, or null if the location is not known.
+     * @param resources The resources used to localize the root object, or null if the root object was not localized.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         rulesArea.setEditable(false);
