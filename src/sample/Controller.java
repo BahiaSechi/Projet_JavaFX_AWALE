@@ -135,6 +135,7 @@ public class Controller implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     // FUNCTIONS : MENU FICHIER
@@ -402,6 +403,7 @@ public class Controller implements Initializable {
             stage.setTitle("AWALE - Règles");
             stage.setScene(new Scene(root1));
             stage.setResizable(false);
+            stage.getIcons().add(new Image("@./../img/icon.png"));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -1038,17 +1040,19 @@ public class Controller implements Initializable {
      * Fonction qui affiche le top 100 des joueurs
      */
     public void afficheTop100() throws IOException {
-        File scoreFile = new File("src/scoreTop100.txt");
 
-        BufferedReader br = new BufferedReader(new FileReader(scoreFile));
-        String st;
-        List<String> stringList;
-
-        for (int i = 0; i < 100 ; i ++) {
-            st = br.readLine();
-            stringList = new ArrayList<>(Arrays.asList(st.split(",")));
-
-            System.out.println(i + " : " + stringList.get(0) + " " + stringList.get(1) + " graines");
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("./Top100View.fxml"));
+            Parent root1 = (Parent) fxmlLoader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("AWALE - Top 100");
+            stage.setScene(new Scene(root1));
+            stage.setResizable(false);
+            stage.getIcons().add(new Image("@./../img/icon.png"));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
