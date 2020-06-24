@@ -34,7 +34,7 @@ public class Main extends Application {
         primaryStage.setScene(new Scene(root, 1360, 750));
         primaryStage.setResizable(false);
         primaryStage.show();
-        primaryStage.getIcons().add(new Image("@./../img/icon.png"));
+        primaryStage.getIcons().add(new Image("img/icon.png"));
     }
 
 

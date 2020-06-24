@@ -403,7 +403,7 @@ public class Controller implements Initializable {
             stage.setTitle("AWALE - Règles");
             stage.setScene(new Scene(root1));
             stage.setResizable(false);
-            stage.getIcons().add(new Image("@./../img/icon.png"));
+            stage.getIcons().add(new Image("/img/icon.png"));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
@@ -439,9 +439,9 @@ public class Controller implements Initializable {
         Image tempImage;
 
         if (nombreDeBilles >= 10) {
-            srcImage = "@./../img/bille_10.png";
+            srcImage = "img/bille_10.png";
         } else {
-            srcImage = "@./../img/bille_"+ nombreDeBilles +".png";
+            srcImage = "img/bille_"+ nombreDeBilles +".png";
         }
 
         tempImage = new Image(srcImage);
@@ -1049,7 +1049,7 @@ public class Controller implements Initializable {
             stage.setTitle("AWALE - Top 100");
             stage.setScene(new Scene(root1));
             stage.setResizable(false);
-            stage.getIcons().add(new Image("@./../img/icon.png"));
+            stage.getIcons().add(new Image("img/icon.png"));
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

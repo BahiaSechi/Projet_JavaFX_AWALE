@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane alignment="center" hgap="10" prefHeight="748.0" prefWidth="1356.0" vgap="10" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+    <columnConstraints>
+        <ColumnConstraints />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints />
+    </rowConstraints>
+    <children>
+        <BorderPane prefHeight="749.0" prefWidth="1365.0">
+            <top>
+                <MenuBar style="-fx-background-color: FFBF64;" BorderPane.alignment="CENTER">
+                    <menus>
+                        <Menu mnemonicParsing="false" text="Fichier">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#newGame" text="Nouveau" />
+                                <MenuItem mnemonicParsing="false" onAction="#loadGame" text="Charger" />
+                                <MenuItem mnemonicParsing="false" onAction="#saveGame" text="Sauvegarder" />
+                                <MenuItem mnemonicParsing="false" onAction="#surrender" text="Abandonner" />
+                                <MenuItem mnemonicParsing="false" onAction="#stopGame" text="Arrêt partie" />
+                                <MenuItem mnemonicParsing="false" onAction="#cancel" text="Annuler coup" />
+                                <MenuItem mnemonicParsing="false" onAction="#quit" text="Quitter jeu" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Règles">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#rules" text="Afficher règles" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Options">
+                            <items>
+                                <CheckMenuItem fx:id="hoverChecked" mnemonicParsing="false" text="Voir graines" />
+                                <CheckMenuItem fx:id="boardChecked" mnemonicParsing="false" onAction="#boardDisplay" text="Voir plateau" />
+                                <CheckMenuItem fx:id="effectCheck" mnemonicParsing="false" text="Bruitages" />
+                                <CheckMenuItem fx:id="commentCheck" mnemonicParsing="false" text="Commentaires" />
+                                <CheckMenuItem fx:id="musicCheck" mnemonicParsing="false" onAction="#musicPlay" text="Musique" />
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="Système">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#about" text="À propos" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+            </top>
+            <left>
+                <VBox prefHeight="305.0" prefWidth="156.0" style="-fx-background-color: FFD394; -fx-border-color: FFBF64;" BorderPane.alignment="CENTER">
+                    <children>
+                        <Label text="Joueur 1" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="26.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <Label text="(en bas)" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <Label fx:id="grainesJ1" text="Graines : ">
+                            <VBox.margin>
+                                <Insets left="10.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+            </left>
+            <right>
+                <VBox prefHeight="305.0" prefWidth="173.0" style="-fx-background-color: FFD394; -fx-border-color: FFBF64;" BorderPane.alignment="CENTER">
+                    <children>
+                        <Label text="Joueur 2" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="26.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <Label text="(en haut)" textAlignment="CENTER">
+                            <font>
+                                <Font name="System Bold" size="14.0" />
+                            </font>
+                            <VBox.margin>
+                                <Insets left="10.0" top="10.0" />
+                            </VBox.margin>
+                        </Label>
+                        <Label fx:id="grainesJ2" text="Graines :">
+                            <VBox.margin>
+                                <Insets left="10.0" />
+                            </VBox.margin>
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </VBox>
+            </right>
+            <center>
+                <AnchorPane fx:id="plateau_de_jeu" prefHeight="549.0" prefWidth="870.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <ImageView fitHeight="554.0" fitWidth="734.0" layoutX="203.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/plateau.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="1" fx:id="case1" fitHeight="79.0" fitWidth="81.0" layoutX="275.0" layoutY="154.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="2" fx:id="case2" fitHeight="53.0" fitWidth="81.0" layoutX="379.0" layoutY="155.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="3" fx:id="case3" fitHeight="86.0" fitWidth="77.0" layoutX="479.0" layoutY="155.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="4" fx:id="case4" fitHeight="56.0" fitWidth="75.0" layoutX="570.0" layoutY="153.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="5" fx:id="case5" fitHeight="53.0" fitWidth="92.0" layoutX="664.0" layoutY="155.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="6" fx:id="case6" fitHeight="59.0" fitWidth="78.0" layoutX="757.0" layoutY="155.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="7" fx:id="case7" fitHeight="64.0" fitWidth="76.0" layoutX="280.0" layoutY="346.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="8" fx:id="case8" fitHeight="56.0" fitWidth="80.0" layoutX="378.0" layoutY="344.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="9" fx:id="case9" fitHeight="57.0" fitWidth="75.0" layoutX="480.0" layoutY="346.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                        <ImageView id="10" fx:id="case10" fitHeight="51.0" fitWidth="74.0" layoutX="571.0" layoutY="346.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="/img/bille_4.png" />
+                            </image>
+                        </ImageView>
+                      <ImageView id="11" fx:id="case11" fitHeight="53.0" fitWidth="69.0" layoutX="669.0" layoutY="348.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="/img/bille_4.png" />
+                         </image>
+                      </ImageView>
+                      <ImageView id="12" fx:id="case12" fitHeight="65.0" fitWidth="72.0" layoutX="760.0" layoutY="347.0" onMouseClicked="#makeAMove" onMouseEntered="#hoverImage" onMouseExited="#notHoverImage" pickOnBounds="true" preserveRatio="true">
+                         <image>
+                            <Image url="/img/bille_4.png" />
+                         </image>
+                      </ImageView>
+                  <Label layoutX="14.0" layoutY="523.0" text="Journal">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+                  <TextArea fx:id="logs" layoutX="14.0" layoutY="562.0" prefHeight="146.0" prefWidth="998.0" />
+                  <Label layoutX="32.0" layoutY="40.0" text="Difficulté :">
+                     <font>
+                        <Font size="18.0" />
+                     </font></Label>
+                  <RadioButton fx:id="debutant" layoutX="31.0" layoutY="69.0" mnemonicParsing="false" text="Débutant">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="level" />
+                     </toggleGroup>
+                  </RadioButton>
+                  <RadioButton fx:id="moyen" layoutX="31.0" layoutY="92.0" mnemonicParsing="false" text="Moyen" toggleGroup="$level" />
+                  <TextField fx:id="number7" editable="false" layoutX="275.0" layoutY="392.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number2" editable="false" layoutX="365.0" layoutY="204.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number1" editable="false" layoutX="275.0" layoutY="204.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number12" editable="false" layoutX="752.0" layoutY="392.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number11" editable="false" layoutX="646.0" layoutY="392.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number10" editable="false" layoutX="565.0" layoutY="392.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number8" editable="false" layoutX="365.0" layoutY="392.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number9" editable="false" layoutX="457.0" layoutY="392.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number6" editable="false" layoutX="745.0" layoutY="204.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number5" editable="false" layoutX="664.0" layoutY="204.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number3" editable="false" layoutX="464.0" layoutY="204.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                  <TextField fx:id="number4" editable="false" layoutX="556.0" layoutY="204.0" prefHeight="26.0" prefWidth="36.0" visible="false" />
+                    </children>
+                </AnchorPane>
+            </center>
+        </BorderPane>
+    </children>
+</GridPane>
