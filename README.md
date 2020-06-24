@@ -1,4 +1,4 @@
-# **Projet d’Awalé**
+# **Projet d’Awalé** [WIP - English coming when I have time]
 
 
 ## **2019-2020                                    ENSICAEN                                    S. Bahia B. Manfred**
